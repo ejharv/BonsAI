@@ -17,6 +17,7 @@ The Quality agent reads this file during every analysis pass to identify when th
 | Component Name | Purpose | Interface Shape | Locations | Instance Count | Pruning Candidate |
 |----------------|---------|-----------------|-----------|---------------|-------------------|
 | MarkdownTableParser | Parse .md table rows into typed dataclass instances | takes raw string content and section marker, returns list of dataclass instances | root_manager/reader.py | 1 | no |
+| AgentPipeline | Ten-step run pipeline with try/except wrapper — begin_session, load inputs, scan, identify, detect, analyze, gap, roster, write, end_session | run(input) -> output; never raises; returns output with ready_to_proceed=False on error | agents/reconnaissance/agent.py | 1 | no |
 
 Pruning Candidate: `no` → `watch` (2+ instances, not yet consolidatable) → `yes` (consolidation clearly beneficial)
 
@@ -37,4 +38,4 @@ When Instance Count reaches 3+, Quality will assess for consolidation.
 
 ---
 
-_Last updated: 2026-04-07 (Phase 2)_
+_Last updated: 2026-04-08 (Phase 3)_

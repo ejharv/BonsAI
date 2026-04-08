@@ -42,8 +42,9 @@ core/
 | `root_manager/writer.py` | All write operations against roots/; serializes typed structures to .md; marks files DIRTY after every write | Builder | `implemented` | 2026-04-07 |
 | `root_manager/manager.py` | Single interface between agents and roots/; composes reader and writer; manages session-level file status cache | Builder | `implemented` | 2026-04-07 |
 | `tests/test_root_manager.py` | 24 unit tests covering RootReader, RootWriter, and RootManager — all passing | Builder | `complete` | 2026-04-07 |
-| `agents/reconnaissance/models.py` | Typed inputs and outputs for the reconnaissance agent: ConfidenceLevel, GapSeverity, ObservedDomain, DetectedPattern, DeveloperGap, ReconnaissanceInput, ReconnaissanceOutput | Architect | `defined` | 2026-04-07 |
-| `agents/reconnaissance/agent.py` | ReconnaissanceAgent interface — full pipeline contract from load_graphify_report through write_to_roots; all methods raise NotImplementedError | Architect | `defined` | 2026-04-07 |
+| `agents/reconnaissance/models.py` | Typed inputs and outputs for the reconnaissance agent: ConfidenceLevel, GapSeverity, ObservedDomain, DetectedPattern, DeveloperGap, ReconnaissanceInput, ReconnaissanceOutput | Architect | `implemented` | 2026-04-08 |
+| `agents/reconnaissance/agent.py` | ReconnaissanceAgent — full ten-step pipeline: load_graphify_report, scan_project_structure, identify_domains, detect_patterns, analyze_git_history, identify_gaps, propose_roster, write_to_roots | Builder | `implemented` | 2026-04-08 |
+| `tests/test_reconnaissance.py` | 31 unit tests covering ReconnaissanceAgent pipeline, domain identification, pattern detection, gap analysis, roster proposal, and write_to_roots — all passing | Builder | `complete` | 2026-04-08 |
 
 Status values: `defined` (interface exists, no implementation) → `in progress` → `complete` → `deprecated`
 
@@ -61,4 +62,4 @@ The Builder is responsible for keeping this file current. A codebase.md that lag
 
 ---
 
-_Last updated: 2026-04-07 (Phase 2)_
+_Last updated: 2026-04-08 (Phase 3)_

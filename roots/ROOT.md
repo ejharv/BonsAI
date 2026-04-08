@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 3 — Reconnaissance agent interface defined**
+**Phase 3 complete — reconnaissance agent implemented**
 
-Brownfield onboarding agent interface fully contracted. `agents/reconnaissance/models.py` defines all typed inputs and outputs: `ConfidenceLevel`, `GapSeverity`, `ObservedDomain`, `DetectedPattern`, `DeveloperGap`, `ReconnaissanceInput`, `ReconnaissanceOutput`. `agents/reconnaissance/agent.py` defines the full pipeline — ten-step `run` contract plus seven dedicated methods, all raising `NotImplementedError`. Graphify integration decided and recorded.
+`agents/reconnaissance/agent.py` fully implemented. All ten pipeline steps working: project structure scanning with directory pruning, multi-signal domain identification (folders, graphify, config packages, entry points, git history), pattern detection (repeated filenames, similar folder structures, oversized files), git history analysis, gap identification with involvement preference filtering, roster proposal, and full root system writes. 31 tests passing.
 
 ---
 
@@ -28,9 +28,9 @@ Brownfield onboarding agent interface fully contracted. `agents/reconnaissance/m
 
 | Region | Status | Notes |
 |--------|--------|-------|
-| project/ | in progress | Vision, state, and decisions written; state reflects Phase 2 complete |
-| agents/ | initialized | All five agent definitions written |
-| context/ | in progress | Codebase map updated (Phase 2); dependency map current; patterns registry has first entry |
+| project/ | in progress | Vision, state, and decisions written; state reflects Phase 3 complete |
+| agents/ | in progress | All five agent definitions written; reconnaissance agent fully implemented |
+| context/ | in progress | Codebase map updated (Phase 3); dependency map current; patterns registry has two entries |
 | quality/ | initialized | Schema defined, no entries yet |
 | flows/ | initialized | Greenfield and brownfield flows written |
 
@@ -40,12 +40,12 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**Reconnaissance agent — Phase 3.**
+**CLI entry point — Phase 4.**
 
-First real agent that reads an existing codebase and populates the root system. Uses `RootManager` to write `context/codebase.md` and `context/dependencies.md` from static analysis of a target project.
+`bonsai init` command that wires the reconnaissance agent to a real project. Accepts a project path, initializes `roots/`, runs `ReconnaissanceAgent`, and presents developer gaps interactively.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
 ---
 
-_Last updated: 2026-04-07_
+_Last updated: 2026-04-08_

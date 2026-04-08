@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 3 interface complete — reconnaissance agent interface defined**
+**Phase 3 complete — reconnaissance agent implemented and tested**
 
 ---
 
@@ -31,6 +31,17 @@
   - `agents/reconnaissance/agent.py` — full ten-step pipeline contracted, all methods raise NotImplementedError
   - Graphify integration decided: graphify runs once at onboarding, roots/ owns continuous updates
   - Three decisions recorded in project/decisions.md
+- Reconnaissance agent implemented and tested
+  - All `NotImplementedError` stubs replaced with working Python code
+  - `load_graphify_report` — parses God Nodes, Communities, Connections sections from markdown
+  - `scan_project_structure` — walks project tree with directory pruning via os.walk; collects folders, extensions, config files, entry points, manifest contents
+  - `identify_domains` — multi-signal domain detection: top-level folders (with container folder unwrapping), graphify communities, requirements.txt packages, entry points, git frequency
+  - `detect_patterns` — repeated filenames (excluding conventional), similar folder structures (Jaccard >70%), oversized files (>500 lines)
+  - `analyze_git_history` — commit frequency per folder, co-change pairs, recent activity; all subprocess calls with 30s timeout
+  - `identify_gaps` — four gap types with involvement_preference filtering (BLOCKING/IMPORTANT/OPTIONAL)
+  - `propose_roster` — one agent per HIGH/MEDIUM domain, LOW merged or flagged unverified, always quality + evaluator
+  - `write_to_roots` — codebase entries, dependency entries, pattern entries, project state, agent .md files
+  - 31 unit tests in `tests/test_reconnaissance.py` — all passing
 
 ---
 
@@ -42,11 +53,10 @@ _Nothing._
 
 ## Next
 
-- **Reconnaissance agent implementation — Phase 3** — implement all NotImplementedError stubs in agent.py
-  - Implement `scan_project_structure`, `load_graphify_report`, `identify_domains`
-  - Implement `detect_patterns`, `analyze_git_history`, `identify_gaps`, `propose_roster`
-  - Implement `write_to_roots` and the top-level `run` pipeline
-  - Write tests covering the full pipeline
+- **CLI entry point — Phase 4** — `bonsai init` command that wires the reconnaissance agent to a real project
+  - Accepts a project path as argument
+  - Initializes roots/ directory in that project
+  - Runs ReconnaissanceAgent and presents gaps to the developer interactively
 
 ---
 
@@ -76,4 +86,10 @@ Reconnaissance agent interface defined. Three decisions recorded: graphify integ
 
 ---
 
-_Last updated: 2026-04-07_
+**Session: 2026-04-08**
+
+Reconnaissance agent implemented in full. All `NotImplementedError` stubs replaced with working Python code. `scan_project_structure` uses `os.walk` with in-place directory pruning to skip `.git`, `__pycache__`, `node_modules`, and similar. `identify_domains` unwraps container folders (`src/`, `app/`) to find domain subdirectories, then combines folder signals, graphify community signals, requirements.txt package hints, entry point signals, and git frequency signals — assigning HIGH (3+), MEDIUM (2), or LOW (1) confidence. `detect_patterns` checks for repeated filenames (≥3 occurrences, excluding conventional files), similar folder structures (Jaccard similarity >70%), and oversized files (>500 lines). `analyze_git_history` runs `git log` with subprocess, parses commit blocks into per-folder frequency counts and co-change pairs. `identify_gaps` produces four gaps (purpose, activity, duplication, constraints) filtered by involvement_preference. `propose_roster` produces one `{name}_agent` per HIGH/MEDIUM domain, merges LOW domains into parents or marks `_unverified_agent`, always appends quality and evaluator. `write_to_roots` writes codebase entries, dependency entries, pattern entries, project state, and agent `.md` files via RootManager and direct pathlib writes. 31 unit tests written and all passing. `AgentPipeline` pattern registered in `context/patterns.md`. Phase 3 complete.
+
+---
+
+_Last updated: 2026-04-08_
