@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 4 complete — bonsai init CLI working**
+**Phase 5 — Executor interfaces defined**
 
-`bonsai/__main__.py`, `bonsai/cli/display.py`, and `bonsai/cli/init_command.py` implemented. `python -m bonsai init <path>` validates the project, initializes roots/, runs ReconnaissanceAgent, presents developer gaps interactively, confirms agent roster, and writes .bonsai config. 18 CLI tests passing. Smoke tested against BonsAI itself.
+`core/executor/` layer contracted: models, base, claude_code, and api backends all defined with NotImplementedError stubs. `bonsai/cli/run_command.py` interface defined. `bonsai run` wired into `__main__.py`. Builder implementation in progress.
 
 ---
 
@@ -40,12 +40,12 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**bonsai run command — Phase 5.**
+**Implement executor layer — Phase 5 Builder.**
 
-Task execution against an initialized project. Routes a task description to the appropriate agent(s) based on domain, executes with budget tracking and session management.
+All NotImplementedError stubs in core/executor/ and bonsai/cli/run_command.py to be implemented. Tests written and passing. Smoke tested against BonsAI itself.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
 ---
 
-_Last updated: 2026-04-08 (Phase 4)_
+_Last updated: 2026-04-08 (Phase 5 interfaces)_

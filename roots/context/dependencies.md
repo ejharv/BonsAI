@@ -27,7 +27,12 @@ The Architect writes to this file when establishing structural contracts. The Bu
 | `agents/reconnaissance/agent.py` | `root_manager/manager.py`, `agents/reconnaissance/models.py` | `bonsai/cli/init_command.py` | `high` |
 | `bonsai/cli/display.py` | nothing external | `bonsai/cli/init_command.py` | `medium` |
 | `bonsai/cli/init_command.py` | `agents/reconnaissance/agent.py`, `agents/reconnaissance/models.py`, `root_manager/manager.py`, `bonsai/cli/display.py` | `bonsai/__main__.py` | `high` |
-| `bonsai/__main__.py` | `bonsai/cli/init_command.py` | nothing (entry point) | `medium` |
+| `bonsai/__main__.py` | `bonsai/cli/init_command.py`, `bonsai/cli/run_command.py` | nothing (entry point) | `medium` |
+| `core/executor/models.py` | nothing external | `core/executor/base.py`, `core/executor/claude_code.py`, `core/executor/api.py`, `bonsai/cli/run_command.py` | `critical` |
+| `core/executor/base.py` | `core/executor/models.py` | `core/executor/claude_code.py`, `core/executor/api.py`, `bonsai/cli/run_command.py` | `critical` |
+| `core/executor/claude_code.py` | `core/executor/base.py`, `core/executor/models.py` | `bonsai/cli/run_command.py` | `high` |
+| `core/executor/api.py` | `core/executor/base.py`, `core/executor/models.py` | `bonsai/cli/run_command.py` | `high` |
+| `bonsai/cli/run_command.py` | `core/executor/base.py`, `core/executor/models.py`, `root_manager/manager.py` | `bonsai/__main__.py` | `high` |
 
 Criticality values:
 - `critical` — removing this component breaks core flows
@@ -49,4 +54,4 @@ A pruning proposal without a blast radius assessment will not be approved.
 
 ---
 
-_Last updated: 2026-04-08 (Phase 4)_
+_Last updated: 2026-04-08 (Phase 5 interfaces)_

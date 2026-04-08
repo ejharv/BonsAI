@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 4 complete — CLI entry point implemented, bonsai init working**
+**Phase 5 interfaces defined — executor layer contracted, awaiting Builder implementation**
 
 ---
 
@@ -48,21 +48,27 @@
   - `bonsai/cli/init_command.py` — full init pipeline: validate, initialize roots/, run reconnaissance, present gaps, confirm roster, write .bonsai config
   - 18 unit tests in `tests/test_cli.py` — all passing
   - Smoke tested against BonsAI codebase itself — `bonsai init . --involvement low` completes successfully
+- Executor interfaces defined — claude_code and api backends contracted
+  - `core/executor/models.py` — ExecutorBackend, ExecutorStatus, AgentContext, AgentPrompt, BudgetUsage, ExecutorResult
+  - `core/executor/base.py` — BaseExecutor ABC, shared _parse_roots_updates, build_prompt_text contract
+  - `core/executor/claude_code.py` — ClaudeCodeExecutor contract (all NotImplementedError)
+  - `core/executor/api.py` — APIExecutor contract (all NotImplementedError)
+  - `bonsai/cli/run_command.py` — run_task, _load_bonsai_config, _select_executor, _route_task, _load_agent_context, _apply_roots_updates contracts
+  - Two decisions recorded: executor backends, keyword routing
 
 ---
 
 ## In Progress
 
-_Nothing._
+- Executor layer Builder implementation — all NotImplementedError stubs to be replaced
 
 ---
 
 ## Next
 
-- **bonsai run command — Phase 5** — task execution against an initialized project
-  - Accepts a task description as argument
-  - Routes task to appropriate agent(s) based on domain
-  - Executes with budget tracking and session management
+- Implement all NotImplementedError stubs in executor layer and run_command.py
+- Write tests/test_executor.py and pass all tests
+- Smoke test: bonsai run against BonsAI itself
 
 ---
 

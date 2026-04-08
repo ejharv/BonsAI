@@ -29,4 +29,16 @@
 
 ---
 
-_Last updated: 2026-04-07_
+### Decision: "Two executor backends — claude_code and api"
+**Date:** 2026-04-08
+**Rationale:** Bonsai supports two execution modes. claude_code mode uses Claude Code CLI via subprocess with --print flag — works with Max plan subscription, no API key needed. api mode calls Anthropic API directly via Python SDK — requires API key, gives precise token tracking, better for production deployments. The executor interface is identical in both modes. The .bonsai config specifies which executor a project uses. Budget tracking: api mode uses exact token counts. claude_code mode uses wall clock time and output length as proxy metrics.
+**Alternatives considered:** claude_code only — rejected because production deployments may not have Max plan. api only — rejected because user already pays for Max plan and should not need separate API credits for local development.
+
+### Decision: "Keyword routing for initial task-to-agent mapping"
+**Date:** 2026-04-08
+**Rationale:** Simple keyword matching routes tasks to agents for the first implementation. Sufficient for Phase 5. Will be replaced with semantic routing using embeddings in a future phase when the system has enough usage data to validate routing accuracy.
+**Alternatives considered:** Embedding similarity routing — deferred, adds complexity before we have evidence simple routing fails.
+
+---
+
+_Last updated: 2026-04-08_

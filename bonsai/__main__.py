@@ -18,6 +18,56 @@ def main():
         metavar="command"
     )
 
+    # bonsai run
+    run_parser = subparsers.add_parser(
+        "run",
+        help=(
+            "Run a task against an "
+            "initialized project."
+        )
+    )
+    run_parser.add_argument(
+        "task",
+        help=(
+            "Task description in plain "
+            "english. Be specific. "
+            "Example: 'implement the "
+            "budget conservation "
+            "invariant in core/"
+            "invariants/invariants.py'"
+        )
+    )
+    run_parser.add_argument(
+        "--executor",
+        choices=[
+            "claude_code", "api"
+        ],
+        default=None,
+        help=(
+            "Force a specific executor "
+            "backend. Overrides .bonsai "
+            "config. Default: auto-select"
+        )
+    )
+    run_parser.add_argument(
+        "--agent",
+        default=None,
+        help=(
+            "Force a specific agent. "
+            "Overrides auto-routing. "
+            "Example: --agent builder"
+        )
+    )
+    run_parser.add_argument(
+        "--budget",
+        type=float,
+        default=10.0,
+        help=(
+            "Budget units for this task. "
+            "Default: 10.0"
+        )
+    )
+
     # bonsai init
     init_parser = subparsers.add_parser(
         "init",
@@ -76,6 +126,11 @@ def main():
 
     if args.command == "init":
         success = run_init(args)
+        sys.exit(0 if success else 1)
+    elif args.command == "run":
+        from bonsai.cli.run_command \
+            import run_task
+        success = run_task(args)
         sys.exit(0 if success else 1)
     else:
         parser.print_help()

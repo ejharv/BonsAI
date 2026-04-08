@@ -6,9 +6,9 @@
 
 ## Current State
 
-**Phase 4 complete. CLI entry point implemented.**
+**Phase 5 interfaces defined. Executor layer contracted.**
 
-Twelve modules written. Core contracts, root manager, reconnaissance agent, and CLI entry point all complete. `bonsai init` is runnable against any project.
+Seventeen modules tracked. Executor layer interfaces (models, base, claude_code, api) and run command interface defined. `bonsai run` contracted and ready for Builder implementation.
 
 ---
 
@@ -45,10 +45,15 @@ core/
 | `agents/reconnaissance/models.py` | Typed inputs and outputs for the reconnaissance agent: ConfidenceLevel, GapSeverity, ObservedDomain, DetectedPattern, DeveloperGap, ReconnaissanceInput, ReconnaissanceOutput | Architect | `implemented` | 2026-04-08 |
 | `agents/reconnaissance/agent.py` | ReconnaissanceAgent — full ten-step pipeline: load_graphify_report, scan_project_structure, identify_domains, detect_patterns, analyze_git_history, identify_gaps, propose_roster, write_to_roots | Builder | `implemented` | 2026-04-08 |
 | `tests/test_reconnaissance.py` | 31 unit tests covering ReconnaissanceAgent pipeline, domain identification, pattern detection, gap analysis, roster proposal, and write_to_roots — all passing | Builder | `complete` | 2026-04-08 |
-| `bonsai/__main__.py` | CLI entry point; routes `python -m bonsai <command>` to subcommand handlers; argparse-based with `init` subcommand | Builder | `implemented` | 2026-04-08 |
+| `bonsai/__main__.py` | CLI entry point; routes `python -m bonsai <command>` to subcommand handlers; argparse-based with `init` and `run` subcommands | Builder | `implemented` | 2026-04-08 |
 | `bonsai/cli/display.py` | All terminal output for the CLI; print_header, print_step, print_success, print_warning, print_error, print_domain_summary, print_gap_question, print_roster_summary, print_bonsai_complete | Builder | `implemented` | 2026-04-08 |
 | `bonsai/cli/init_command.py` | Implementation of `bonsai init`; wires ReconnaissanceAgent, gap presentation, roots/ initialization, roster confirmation, and .bonsai config write | Builder | `implemented` | 2026-04-08 |
 | `tests/test_cli.py` | 18 unit tests covering _initialize_roots, display functions, _write_bonsai_config, and run_init integration — all passing | Builder | `complete` | 2026-04-08 |
+| `core/executor/models.py` | Typed inputs and outputs for all executor backends: ExecutorBackend, ExecutorStatus, AgentContext, AgentPrompt, BudgetUsage, ExecutorResult | Architect | `defined` | 2026-04-08 |
+| `core/executor/base.py` | Abstract base class BaseExecutor; shared _parse_roots_updates module function; build_prompt_text contract | Architect | `defined` | 2026-04-08 |
+| `core/executor/claude_code.py` | ClaudeCodeExecutor — runs agents via claude --print subprocess; Max plan auth; budget via wall time and output length | Architect | `defined` | 2026-04-08 |
+| `core/executor/api.py` | APIExecutor — calls Anthropic API via Python SDK; requires ANTHROPIC_API_KEY; precise token budget tracking | Architect | `defined` | 2026-04-08 |
+| `bonsai/cli/run_command.py` | Implementation of `bonsai run`; routes task to agent, builds AgentPrompt, executes, applies roots updates, reports results | Architect | `defined` | 2026-04-08 |
 
 Status values: `defined` (interface exists, no implementation) → `in progress` → `complete` → `deprecated`
 
@@ -66,4 +71,4 @@ The Builder is responsible for keeping this file current. A codebase.md that lag
 
 ---
 
-_Last updated: 2026-04-08 (Phase 4)_
+_Last updated: 2026-04-08 (Phase 5 interfaces)_
