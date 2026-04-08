@@ -19,6 +19,10 @@ The Architect writes to this file when establishing structural contracts. The Bu
 | `core/seed/seed.py` | nothing external | `core/invariants/invariants.py`, everything that executes a seed | `critical` |
 | `core/invariants/invariants.py` | `core/seed/seed.py` | everything that executes a seed | `critical` |
 | `core/lifecycle/lifecycle.py` | nothing external | everything that transitions a seed | `critical` |
+| `root_manager/models.py` | nothing external | `root_manager/reader.py`, `root_manager/writer.py`, `root_manager/manager.py`, all agents | `critical` |
+| `root_manager/reader.py` | `root_manager/models.py` | `root_manager/manager.py`, all agents | `critical` |
+| `root_manager/writer.py` | `root_manager/models.py` | `root_manager/manager.py`, all agents | `critical` |
+| `root_manager/manager.py` | `root_manager/reader.py`, `root_manager/writer.py`, `root_manager/models.py` | all agents | `critical` |
 
 Criticality values:
 - `critical` — removing this component breaks core flows

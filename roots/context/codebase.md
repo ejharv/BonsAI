@@ -37,6 +37,10 @@ core/
 | `core/seed/seed.py` | Seed dataclass and all component structures (Identity, Contract, ResourceEnvelope, CapabilityNeed, GrowthConditions, Signal, Closure) | Architect | `defined` | 2026-04-07 |
 | `core/invariants/invariants.py` | Three invariant contracts: intent coherence, budget conservation, signal propagation | Architect | `defined` | 2026-04-07 |
 | `core/lifecycle/lifecycle.py` | Lifecycle stages enum and all valid state transitions | Architect | `defined` | 2026-04-07 |
+| `root_manager/models.py` | Typed representations of all roots/ structures: FileStatus, Freshness, RootFile, RegionIndex, ProjectState, DecisionEntry, CodebaseEntry, DependencyEntry, RootManagerResult | Architect | `defined` | 2026-04-07 |
+| `root_manager/reader.py` | All read operations against roots/; parses .md content into typed structures; returns RootManagerResult | Architect | `defined` | 2026-04-07 |
+| `root_manager/writer.py` | All write operations against roots/; serializes typed structures to .md; marks files DIRTY after every write | Architect | `defined` | 2026-04-07 |
+| `root_manager/manager.py` | Single interface between agents and roots/; composes reader and writer; manages session-level file status cache | Architect | `defined` | 2026-04-07 |
 
 Status values: `defined` (interface exists, no implementation) → `in progress` → `complete` → `deprecated`
 

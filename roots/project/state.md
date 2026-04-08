@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 1 complete — Core seed defined**
+**Phase 1 complete — all core interfaces defined**
 
 ---
 
@@ -17,21 +17,24 @@
   - All structures as dataclasses, no implementation logic
   - Three invariants defined as `NotImplementedError` contracts
   - Full lifecycle state machine with all valid transitions
+- Root manager interface — `root_manager/models.py`, `root_manager/reader.py`, `root_manager/writer.py`, `root_manager/manager.py`
+  - All types, reader contracts, writer contracts, and session management interface defined
+  - All methods raise `NotImplementedError` — contracts only, no implementation logic
 
 ---
 
 ## In Progress
 
-_Nothing. Phase 1 is complete._
+_Nothing._
 
 ---
 
 ## Next
 
-- **Root manager** — the interface between agents and the `.md` file system
-  - Reads and writes `roots/` files on behalf of agents
-  - Provides structured access to state, decisions, codebase map, and dependency map
-  - No agent should touch `.md` files directly; all access goes through the root manager
+- **Root manager implementation — Phase 2** — make the `NotImplementedError` stubs into working code
+  - `RootReader`: parse `.md` files into typed structures
+  - `RootWriter`: serialize typed structures back to `.md`, mark files DIRTY
+  - `RootManager`: compose reader and writer, manage session cache, implement `begin_session` / `end_session`
 
 ---
 
@@ -45,7 +48,7 @@ _None._
 
 **Session: 2026-04-07**
 
-Phase 1 complete. Core structural contracts written in Python. `core/seed/seed.py` defines the Seed and all seven component dataclasses. `core/invariants/invariants.py` defines the three system invariants as `NotImplementedError` contracts. `core/lifecycle/lifecycle.py` defines the six lifecycle stages and eleven valid transitions. Two architectural decisions recorded. Codebase map and dependency map updated. Root system pushed to main.
+Root manager interface defined. `root_manager/models.py` establishes all typed structures (FileStatus, Freshness, RootFile, RegionIndex, ProjectState, DecisionEntry, CodebaseEntry, DependencyEntry, RootManagerResult). `root_manager/reader.py` defines nine read contracts. `root_manager/writer.py` defines eight write contracts including dirty flag management and pattern tracking. `root_manager/manager.py` defines the single agent-facing interface with session lifecycle and needs_reread. Decision recorded: RootManager as single interface, no direct file access by agents. Codebase map, dependency map, state, and ROOT.md updated. Root manager interface pushed to main.
 
 ---
 

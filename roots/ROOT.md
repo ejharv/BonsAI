@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 1 — Core seed defined**
+**Phase 1 complete — all core interfaces defined**
 
-The structural contracts are established. `core/seed/seed.py` defines the Seed and all component dataclasses. Invariants and lifecycle are defined as contracts. No implementation logic exists yet.
+The seed, invariants, lifecycle, and root manager interface are all defined as typed contracts. No implementation logic exists yet. All methods raise `NotImplementedError` — ready for Phase 2.
 
 ---
 
@@ -30,7 +30,7 @@ The structural contracts are established. `core/seed/seed.py` defines the Seed a
 |--------|--------|-------|
 | project/ | in progress | Vision, state, and decisions written; state reflects Phase 1 complete |
 | agents/ | initialized | All five agent definitions written |
-| context/ | in progress | Codebase map and dependency map populated with Phase 1 modules |
+| context/ | in progress | Codebase map and dependency map populated with Phase 1 + root manager modules |
 | quality/ | initialized | Schema defined, no entries yet |
 | flows/ | initialized | Greenfield and brownfield flows written |
 
@@ -40,9 +40,9 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**Root manager.**
+**Root manager implementation — Phase 2.**
 
-The interface between agents and the `.md` file system. Agents should never touch root files directly — all reads and writes go through the root manager. This is the first piece of runtime infrastructure.
+Make the `NotImplementedError` stubs in `root_manager/` into working code. Reader parses `.md` into typed structures. Writer serializes typed structures to `.md` and marks files DIRTY. Manager composes both and handles session lifecycle.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
