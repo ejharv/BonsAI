@@ -44,10 +44,14 @@ def today_iso() -> str:
 # Module-level constants
 # ---------------------------------------------------------------------------
 
-# Directories to skip entirely during tree walk
+# Directories to skip entirely during tree walk and to exclude from
+# top-level domain candidate generation (IDE folders, tooling, Bonsai's own dirs)
 _EXCLUDED_DIRS = {
     ".git", "__pycache__", "node_modules", ".venv", "venv",
     "dist", "build", ".next", ".nuxt", "eggs",
+    ".vscode", ".idea", ".eclipse", "roots", ".github",
+    ".cache", ".pytest_cache", "coverage", "out", ".output",
+    "vendor", "bower_components",
 }
 
 # Folder names that are never domains (support/meta folders)
@@ -79,6 +83,9 @@ _ENTRY_POINTS = {
 _CONVENTIONAL_FILENAMES = {
     "__init__.py", "index.py", "index.ts", "index.js",
     "README.md", "types.py", "types.ts", "models.py",
+    "index.md", "index.html", "index.tsx", "index.jsx",
+    "CHANGELOG.md", "LICENSE", "Makefile", ".gitignore",
+    ".env.example",
 }
 
 # Package name -> domain hint (requirements.txt signal)
@@ -214,6 +221,33 @@ class ReconnaissanceAgent:
         # Stored during run() so identify_gaps can filter by involvement level
         self._involvement_preference: str = "high"
 
+    def _is_container_folder(
+        self,
+        folder_path: Path,
+    ) -> bool:
+        """
+        A container folder is one that exists primarily to hold subdomain
+        folders rather than files directly.
+
+        Heuristic: if a folder has more immediate subdirectories than immediate
+        files it is a container. If it has more files than subdirs it is a
+        domain leaf and should not be unwrapped.
+
+        Excludes hidden dirs and known tooling dirs from the count.
+        """
+        try:
+            contents = list(folder_path.iterdir())
+            subdirs = [
+                x for x in contents
+                if x.is_dir()
+                and not x.name.startswith(".")
+                and x.name not in {"node_modules", "__pycache__", ".git"}
+            ]
+            files = [x for x in contents if x.is_file()]
+            return len(subdirs) > len(files)
+        except PermissionError:
+            return False
+
     def run(
         self,
         input: ReconnaissanceInput,
@@ -238,15 +272,15 @@ class ReconnaissanceAgent:
             # Step 3
             self._structure = self.scan_project_structure()
 
-            # Step 4
-            domains = self.identify_domains(self._structure, self._graphify_data)
-
-            # Step 5
-            patterns = self.detect_patterns(self._structure)
-
-            # Step 6
+            # Step 4 — git signals first so identify_domains can use them
             if input.trust_git_history:
                 self._git_signals = self.analyze_git_history()
+
+            # Step 5
+            domains = self.identify_domains(self._structure, self._graphify_data)
+
+            # Step 6
+            patterns = self.detect_patterns(self._structure)
 
             # Step 7
             gaps = self.identify_gaps(domains, self._structure)
@@ -437,8 +471,8 @@ class ReconnaissanceAgent:
                 if d not in _EXCLUDED_DIRS and not d.endswith(".egg-info")
             ]
 
-            # Record top-level folders (depth == 1)
-            if len(rel_parts) == 1:
+            # Record top-level folders (depth == 1), excluding tooling/IDE dirs
+            if len(rel_parts) == 1 and rel_dir.name not in _EXCLUDED_DIRS:
                 top_level_folders.append(rel_dir.name)
 
             # Record directory (skip the project root itself)
@@ -536,8 +570,8 @@ class ReconnaissanceAgent:
             if norm in _NON_DOMAIN_FOLDERS:
                 continue
 
-            if norm in _CONTAINER_FOLDERS:
-                # Container folders (src/, app/) hold domain subdirs — look inside
+            if self._is_container_folder(self.project_path / folder):
+                # Container folder (more subdirs than files) — look inside for domains
                 container_path = self.project_path / folder
                 try:
                     children = [c for c in container_path.iterdir() if c.is_dir()]
@@ -632,6 +666,19 @@ class ReconnaissanceAgent:
                 file_paths=data["files"],
                 dependencies=deps,
             ))
+
+        # Confidence adjustment from git signals — lower MEDIUM to LOW
+        # for folders with no recent activity (may be deprecated or stable)
+        if self._git_signals:
+            recent = self._git_signals.get("recent_activity", {})
+            for domain in domains:
+                has_recent = recent.get(domain.name, True)
+                if not has_recent:
+                    if domain.confidence == ConfidenceLevel.MEDIUM:
+                        domain.confidence = ConfidenceLevel.LOW
+                    domain.evidence.append(
+                        "low recent git activity — may be deprecated or stable"
+                    )
 
         # Sort HIGH → MEDIUM → LOW
         domains.sort(key=lambda d: d.confidence.value)

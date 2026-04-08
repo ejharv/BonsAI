@@ -9,6 +9,18 @@ project.
 from pathlib import Path
 import sys
 
+
+def _flush_stdin() -> None:
+    """
+    Flush any remaining input in stdin buffer.
+    Works on Linux/Mac. Falls back silently on Windows or if not a tty.
+    """
+    try:
+        import termios
+        termios.tcflush(sys.stdin, termios.TCIFLUSH)
+    except Exception:
+        pass
+
 from agents.reconnaissance.agent import (
     ReconnaissanceAgent
 )
@@ -198,6 +210,7 @@ def run_init(args) -> bool:
     )
 
     # Confirm roster with developer
+    _flush_stdin()
     confirmed = _confirm_roster(
         output.proposed_roster
     )
@@ -323,6 +336,7 @@ def _present_gaps(
 
         try:
             answer = input("  > ").strip()
+            _flush_stdin()
         except (EOFError, KeyboardInterrupt):
             print()
             print_warning(

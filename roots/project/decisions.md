@@ -64,6 +64,11 @@
 **Rationale:** 180s default caused silent failures on complex tasks. 300s is more realistic for Claude Code execution. Progress spinner prevents developer from thinking the system has frozen during long executions. Helpful timeout message tells the developer exactly how to retry.
 **Alternatives considered:** Async streaming output — claude --print does not support streaming, spinner is the practical alternative.
 
+### Decision: "Content-based container folder detection replaces name-based"
+**Date:** 2026-04-08
+**Rationale:** Name-based unwrapping was too aggressive — `public/` contains site files directly and should be a domain, not unwrapped. The new heuristic: more subdirs than files means container (unwrap); more files than subdirs means domain leaf (keep as domain). This correctly handles `src/` (container) and `public/` (domain) without hardcoding folder names. Hidden dirs and known tooling dirs (`node_modules`, `__pycache__`, `.git`) are excluded from the count.
+**Alternatives considered:** Whitelist of container folder names — rejected because it requires constant maintenance as project structures vary.
+
 ---
 
 _Last updated: 2026-04-08_

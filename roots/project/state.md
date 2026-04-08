@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 7 complete — polishing for real project test**
+**Phase 7 complete — bug fixes from FitCypher real project test**
 
 ---
 
@@ -77,18 +77,25 @@
   - Better timeout error message with exact retry command
   - CLAUDE.md created in project root with environment, structure, git, commands, and style rules
   - 128 unit tests still passing
+- Reconnaissance agent bugs fixed — 5 bugs from FitCypher real project test
+  - Bug 1: .vscode and roots/ appearing as domains — expanded _EXCLUDED_DIRS, filter top_level_folders
+  - Bug 2: public/ not detected as domain — content-based _is_container_folder replaces name-based _CONTAINER_FOLDERS check
+  - Bug 3: deprecated code getting MEDIUM confidence — analyze_git_history moved before identify_domains; confidence adjustment step added
+  - Bug 4: multi-line paste breaks gap input — _flush_stdin() added to init_command.py, called after each input() and before roster confirmation
+  - Bug 5: index.md false positive repetition — _CONVENTIONAL_FILENAMES expanded; roots/ excluded via _EXCLUDED_DIRS
+  - 128 unit tests still passing
 
 ---
 
 ## In Progress
 
-_Nothing._
+FitCypher real project test — running bonsai init against FitCypher site repo
 
 ---
 
 ## Next
 
-- **Test on FitCypher site repo** — first real project run
+- **Complete FitCypher test** — confirm roster, validate domain detection
 - **Phase 8 — Package and publish**
   - Make Bonsai installable via pip
   - Write README
@@ -117,4 +124,4 @@ Phase 6 complete. Orchestrator implemented in full. `core/orchestrator/models.py
 
 ---
 
-_Last updated: 2026-04-08 (Phase 7 complete — polishing)_
+_Last updated: 2026-04-08 (Phase 7 complete — bug fixes from FitCypher test)_
