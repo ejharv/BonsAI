@@ -39,13 +39,13 @@ def check_budget_conservation(
     """
     Invariant 2 — Budget Conservation.
 
-    The sum of all credits allocated to children plus the node's own reserved
-    credits must never exceed the total credits this node received.
+    The sum of all budget allocated to children plus the node's own reserved
+    budget must never exceed the total budget this node received.
 
     A node cannot spend what it does not have. A node cannot allocate 100% to
     children — it must always reserve enough for synthesis and closure.
 
-    Prevents: credit overrun, nodes that cannot afford to synthesize their
+    Prevents: budget overrun, nodes that cannot afford to synthesize their
     children's outputs, cascade budget failures.
     """
     raise NotImplementedError(
@@ -66,7 +66,7 @@ def check_signal_propagation(
     with no children scores itself directly against its contract.
 
     Prevents: parent nodes masking child failures, false positive contribution
-    scores, misallocation of credits based on inflated performance signals.
+    scores, misallocation of budget based on inflated performance signals.
     """
     raise NotImplementedError(
         "Signal propagation requires weighted aggregation strategy. "

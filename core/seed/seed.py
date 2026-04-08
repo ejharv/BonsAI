@@ -3,6 +3,11 @@ The Seed is the fundamental recursive unit of Bonsai. Every node in the agent
 tree — root, branch, or leaf — is an instantiation of this structure with
 different context. The seed does not contain implementation logic. It defines
 what every node must know about itself to participate in the system.
+
+Budget units are abstract effort tokens. They represent allocated agent
+attention and compute effort, not API billing costs. Bonsai's resource
+accounting is independent of any billing model or API plan. The same system
+works whether the underlying API is metered, subscription, or free.
 """
 
 from __future__ import annotations
@@ -38,15 +43,21 @@ class Contract:
 
 @dataclass
 class ResourceEnvelope:
-    # credits_allocated: total credits received from parent
-    credits_allocated: float
-    # credits_consumed: running counter of credits used during execution
-    credits_consumed: float = 0.0
-    # credits_reserved: minimum kept for synthesis and closure operations
-    credits_reserved: float = 0.0
-    # credits_available: allocated minus consumed minus reserved
-    credits_available: float = 0.0
-    # allocation_policy: rule for subdividing credits to children, stores the policy name not amounts
+    """
+    Budget units are abstract effort tokens. They represent allocated agent
+    attention and compute effort, not API billing costs. Bonsai's resource
+    accounting is independent of any billing model or API plan. The same system
+    works whether the underlying API is metered, subscription, or free.
+    """
+    # budget_allocated: total budget received from parent
+    budget_allocated: float
+    # budget_consumed: running counter of budget used during execution
+    budget_consumed: float = 0.0
+    # budget_reserved: minimum kept for synthesis and closure operations
+    budget_reserved: float = 0.0
+    # budget_available: allocated minus consumed minus reserved
+    budget_available: float = 0.0
+    # allocation_policy: rule for subdividing budget to children, stores the policy name not amounts
     allocation_policy: str = ""
 
 
@@ -70,7 +81,7 @@ class GrowthConditions:
     warn_threshold: float
     # prune_threshold: contribution ratio that triggers node closure
     prune_threshold: float
-    # min_budget_to_branch: credits available floor below which branching never occurs regardless of complexity signal
+    # min_budget_to_branch: budget available floor below which branching never occurs regardless of complexity signal
     min_budget_to_branch: float
 
 
@@ -82,8 +93,8 @@ class Signal:
     complexity_delta: float = 0.0
     # confidence: how certain the node is about its output quality
     confidence: float = 0.0
-    # credits_efficiency: contribution score divided by credits consumed
-    credits_efficiency: float = 0.0
+    # value_efficiency: contribution score divided by budget consumed
+    value_efficiency: float = 0.0
 
 
 @dataclass
@@ -92,8 +103,8 @@ class Closure:
     partial_output: Any
     # termination_reason: why this node stopped, one of: completed, pruned, budget_exhausted, invariant_violated, parent_closed
     termination_reason: str
-    # credits_returned: unused credits released back to parent
-    credits_returned: float
+    # budget_returned: unused budget released back to parent
+    budget_returned: float
     # pattern_record: what approach was tried, how far it got, what the failure mode was
     pattern_record: dict
 

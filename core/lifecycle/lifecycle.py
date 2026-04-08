@@ -9,11 +9,11 @@ from dataclasses import dataclass
 
 
 class LifecycleStage(Enum):
-    GERMINATING = auto()   # assessing input, forming growth intention, not yet consuming significant credits
+    GERMINATING = auto()   # assessing input, forming growth intention, not yet consuming significant budget
     GROWING = auto()       # actively executing against intent as single agent
     BRANCHING = auto()     # spawning child seeds, subdividing resource envelope
     CONTRACTING = auto()   # reducing resource usage under pressure from parent, simplifying approach
-    CLOSING = auto()       # emitting closure signal, returning credits, writing pattern record
+    CLOSING = auto()       # emitting closure signal, returning budget, writing pattern record
     CLOSED = auto()        # terminal state, node is done, cannot transition further
 
 
@@ -68,7 +68,7 @@ VALID_TRANSITIONS: list[LifecycleTransition] = [
         from_stage=LifecycleStage.GROWING,
         to_stage=LifecycleStage.CLOSING,
         trigger="budget_exhausted",
-        reason="credits_available has reached zero before task completion",
+        reason="budget_available has reached zero before task completion",
     ),
     LifecycleTransition(
         from_stage=LifecycleStage.BRANCHING,
