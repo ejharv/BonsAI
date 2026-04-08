@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 3 complete — reconnaissance agent implemented**
+**Phase 4 complete — bonsai init CLI working**
 
-`agents/reconnaissance/agent.py` fully implemented. All ten pipeline steps working: project structure scanning with directory pruning, multi-signal domain identification (folders, graphify, config packages, entry points, git history), pattern detection (repeated filenames, similar folder structures, oversized files), git history analysis, gap identification with involvement preference filtering, roster proposal, and full root system writes. 31 tests passing.
+`bonsai/__main__.py`, `bonsai/cli/display.py`, and `bonsai/cli/init_command.py` implemented. `python -m bonsai init <path>` validates the project, initializes roots/, runs ReconnaissanceAgent, presents developer gaps interactively, confirms agent roster, and writes .bonsai config. 18 CLI tests passing. Smoke tested against BonsAI itself.
 
 ---
 
@@ -40,12 +40,12 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**CLI entry point — Phase 4.**
+**bonsai run command — Phase 5.**
 
-`bonsai init` command that wires the reconnaissance agent to a real project. Accepts a project path, initializes `roots/`, runs `ReconnaissanceAgent`, and presents developer gaps interactively.
+Task execution against an initialized project. Routes a task description to the appropriate agent(s) based on domain, executes with budget tracking and session management.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
 ---
 
-_Last updated: 2026-04-08_
+_Last updated: 2026-04-08 (Phase 4)_

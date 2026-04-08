@@ -24,7 +24,10 @@ The Architect writes to this file when establishing structural contracts. The Bu
 | `root_manager/writer.py` | `root_manager/models.py` | `root_manager/manager.py`, all agents | `critical` |
 | `root_manager/manager.py` | `root_manager/reader.py`, `root_manager/writer.py`, `root_manager/models.py` | all agents | `critical` |
 | `agents/reconnaissance/models.py` | nothing external | `agents/reconnaissance/agent.py` | `critical` |
-| `agents/reconnaissance/agent.py` | `root_manager/manager.py`, `agents/reconnaissance/models.py` | nothing yet | `high` |
+| `agents/reconnaissance/agent.py` | `root_manager/manager.py`, `agents/reconnaissance/models.py` | `bonsai/cli/init_command.py` | `high` |
+| `bonsai/cli/display.py` | nothing external | `bonsai/cli/init_command.py` | `medium` |
+| `bonsai/cli/init_command.py` | `agents/reconnaissance/agent.py`, `agents/reconnaissance/models.py`, `root_manager/manager.py`, `bonsai/cli/display.py` | `bonsai/__main__.py` | `high` |
+| `bonsai/__main__.py` | `bonsai/cli/init_command.py` | nothing (entry point) | `medium` |
 
 Criticality values:
 - `critical` — removing this component breaks core flows
@@ -46,4 +49,4 @@ A pruning proposal without a blast radius assessment will not be approved.
 
 ---
 
-_Last updated: 2026-04-07 (Phase 1)_
+_Last updated: 2026-04-08 (Phase 4)_

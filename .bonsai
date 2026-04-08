@@ -1,0 +1,4 @@
+# Bonsai configuration
+involvement=low
+roster=core_unverified_agent,agents_unverified_agent,root_manager_unverified_agent,.claude_unverified_agent,bonsai_unverified_agent,roots_unverified_agent,quality,evaluator
+initialized=True
