@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 6 in progress — orchestrator implemented**
+**Phase 6 complete — multi-agent orchestration working**
 
-`bonsai run-multi` wired. Orchestrator manages multi-agent execution trees with agent-driven branching via `<branch_request>` tags. Node lifecycle (GERMINATING → GROWING → BRANCHING → CLOSING) fully enforced. Budget allocation and signal aggregation across children implemented. Two remaining stubs: `check_intent_coherence` and `check_signal_propagation` in invariants (orchestrator guards around them gracefully until implemented).
+`bonsai run-multi` live and smoke tested. Orchestrator manages multi-agent execution trees with agent-driven branching via `<branch_request>` tags. Node lifecycle fully enforced. Budget allocation and signal aggregation across children working. `check_signal_propagation` invariant implemented. One remaining stub: `check_intent_coherence` (requires embedding similarity — deferred to Phase 7+). 99 unit tests passing.
 
 ---
 
@@ -40,12 +40,12 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**Phase 6 smoke test, then invariant completion.**
+**Phase 7 — Observability and budget dashboard.**
 
-Run `bonsai run-multi` against BonsAI itself to verify tree output and branching behavior. Then implement `check_intent_coherence` and `check_signal_propagation` to harden invariant enforcement.
+Run history stored to roots/. Budget consumption trends per agent. Tree visualization from stored run results.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
 ---
 
-_Last updated: 2026-04-08 (Phase 6 orchestrator implemented)_
+_Last updated: 2026-04-08 (Phase 6 complete)_

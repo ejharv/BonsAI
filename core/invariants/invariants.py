@@ -75,7 +75,24 @@ def check_signal_propagation(
     Prevents: parent nodes masking child failures, false positive contribution
     scores, misallocation of budget based on inflated performance signals.
     """
-    raise NotImplementedError(
-        "Signal propagation requires weighted aggregation strategy. "
-        "Weighting policy defined in Phase 2."
+    if not child_signals:
+        return (
+            True,
+            "No children: seed scores directly against its own contract.",
+        )
+
+    avg_score = sum(s.contribution_score for s in child_signals) / len(child_signals)
+    seed_score = seed.signal.contribution_score
+    delta = abs(seed_score - avg_score)
+
+    if delta <= 0.2:
+        return (
+            True,
+            f"Signal propagates: seed score {seed_score:.4f} within 0.2 of "
+            f"child average {avg_score:.4f} (delta={delta:.4f})",
+        )
+    return (
+        False,
+        f"Signal violation: seed score {seed_score:.4f} differs from child "
+        f"average {avg_score:.4f} by {delta:.4f} (threshold 0.2)",
     )
