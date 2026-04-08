@@ -6,7 +6,10 @@ authentication. No API key needed.
 """
 
 from __future__ import annotations
+import itertools
 import subprocess
+import sys
+import threading
 import time
 from core.executor.base import (
     BaseExecutor,
@@ -53,11 +56,13 @@ class ClaudeCodeExecutor(BaseExecutor):
     def execute(
         self,
         prompt: AgentPrompt,
-        timeout_seconds: int = 120,
+        timeout_seconds: int = 300,
     ) -> ExecutorResult:
         """
         Build prompt text.
         Run: claude --print "{prompt_text}"
+        in a background thread while a
+        spinner runs on the main thread.
         Capture stdout as raw_output.
         Parse roots updates from output.
         Track wall time and output length.
@@ -66,14 +71,49 @@ class ClaudeCodeExecutor(BaseExecutor):
         start_time = time.time()
         prompt_text = self.build_prompt_text(prompt)
 
-        try:
-            result = subprocess.run(
-                ["claude", "--print", prompt_text],
-                capture_output=True,
-                text=True,
-                timeout=timeout_seconds,
+        result_container: dict = {"result": None}
+        error_container: dict = {"error": None}
+
+        def run_subprocess() -> None:
+            try:
+                result_container["result"] = subprocess.run(
+                    ["claude", "--print", prompt_text],
+                    capture_output=True,
+                    text=True,
+                    timeout=timeout_seconds,
+                )
+            except subprocess.TimeoutExpired:
+                error_container["error"] = "timeout"
+            except Exception as e:
+                error_container["error"] = str(e)
+
+        thread = threading.Thread(
+            target=run_subprocess,
+            daemon=True,
+        )
+        thread.start()
+
+        spinner = itertools.cycle(
+            ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"]
+        )
+        elapsed = 0.0
+        while thread.is_alive():
+            frame = next(spinner)
+            elapsed = time.time() - start_time
+            sys.stdout.write(
+                f"\r  {frame} Agent thinking... {elapsed:.0f}s"
             )
-        except subprocess.TimeoutExpired:
+            sys.stdout.flush()
+            thread.join(timeout=0.1)
+
+        sys.stdout.write(
+            f"\r  ✓ Agent responded in {elapsed:.0f}s          \n"
+        )
+        sys.stdout.flush()
+
+        wall_time = time.time() - start_time
+
+        if error_container["error"] == "timeout":
             return ExecutorResult(
                 status=ExecutorStatus.TIMEOUT,
                 raw_output="",
@@ -88,10 +128,13 @@ class ClaudeCodeExecutor(BaseExecutor):
                 ),
                 roots_updates={},
                 file_writes={},
-                error=f"Execution timed out after {timeout_seconds}s",
+                error=(
+                    f"Execution timed out after {timeout_seconds}s."
+                    f" Try: --timeout 300"
+                ),
             )
-        except Exception as e:
-            wall_time = time.time() - start_time
+
+        if error_container["error"]:
             return ExecutorResult(
                 status=ExecutorStatus.FAILED,
                 raw_output="",
@@ -100,20 +143,20 @@ class ClaudeCodeExecutor(BaseExecutor):
                     wall_time_seconds=wall_time,
                     output_length_chars=0,
                     tokens_used=None,
-                    budget_consumed=self._calculate_budget(wall_time, 0),
+                    budget_consumed=0.0,
                 ),
                 roots_updates={},
                 file_writes={},
-                error=str(e),
+                error=error_container["error"],
             )
 
-        wall_time = time.time() - start_time
-        raw_output = result.stdout
+        proc = result_container["result"]
+        raw_output = proc.stdout
 
         return ExecutorResult(
             status=(
                 ExecutorStatus.SUCCESS
-                if result.returncode == 0
+                if proc.returncode == 0
                 else ExecutorStatus.FAILED
             ),
             raw_output=raw_output,
@@ -129,7 +172,7 @@ class ClaudeCodeExecutor(BaseExecutor):
             roots_updates=_parse_roots_updates(raw_output),
             file_writes=_parse_file_writes(raw_output),
             error=(
-                None if result.returncode == 0 else result.stderr
+                None if proc.returncode == 0 else proc.stderr
             ),
         )
 

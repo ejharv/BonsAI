@@ -67,6 +67,17 @@ def main():
             "Default: 10.0"
         )
     )
+    run_parser.add_argument(
+        "--timeout",
+        type=int,
+        default=300,
+        help=(
+            "Timeout in seconds per "
+            "agent execution. "
+            "Default: 300. "
+            "Increase for complex tasks."
+        )
+    )
 
     # bonsai init
     init_parser = subparsers.add_parser(
@@ -200,6 +211,16 @@ def main():
         "--max-depth",
         type=int,
         default=3,
+    )
+    multi_parser.add_argument(
+        "--timeout",
+        type=int,
+        default=300,
+        help=(
+            "Timeout in seconds per "
+            "node execution. "
+            "Default: 300."
+        )
     )
 
     if len(sys.argv) == 1:

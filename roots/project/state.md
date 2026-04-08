@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 7 complete — observability working, bonsai status live**
+**Phase 7 complete — polishing for real project test**
 
 ---
 
@@ -70,6 +70,13 @@
   - 29 unit tests in tests/test_observability.py — all passing (128 total)
   - Smoke tested: bonsai status, bonsai report runs/health/tree all working
   - Two decisions recorded: run history as JSON, status/report as CLI commands
+- Timeout UX fixed, progress spinner added, CLAUDE.md created
+  - Progress spinner in ClaudeCodeExecutor — thread + itertools.cycle braille frames
+  - Default timeout raised from 180s to 300s across all execution paths
+  - --timeout flag added to bonsai run and bonsai run-multi
+  - Better timeout error message with exact retry command
+  - CLAUDE.md created in project root with environment, structure, git, commands, and style rules
+  - 128 unit tests still passing
 
 ---
 
@@ -81,6 +88,7 @@ _Nothing._
 
 ## Next
 
+- **Test on FitCypher site repo** — first real project run
 - **Phase 8 — Package and publish**
   - Make Bonsai installable via pip
   - Write README
@@ -109,4 +117,4 @@ Phase 6 complete. Orchestrator implemented in full. `core/orchestrator/models.py
 
 ---
 
-_Last updated: 2026-04-08 (Phase 7 complete)_
+_Last updated: 2026-04-08 (Phase 7 complete — polishing)_

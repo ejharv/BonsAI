@@ -59,6 +59,11 @@
 **Rationale:** Developers need two modes of observability. status is a quick live dashboard — run it anytime to see project health. report generates detailed artifacts suitable for sharing or archiving. Both read from the same RunStore and ReportGenerator — the CLI commands are thin wrappers.
 **Alternatives considered:** Web dashboard — rejected as too heavy for a CLI tool. Single combined command — rejected because status and report have different use patterns.
 
+### Decision: "Default timeout raised to 300s with progress spinner"
+**Date:** 2026-04-08
+**Rationale:** 180s default caused silent failures on complex tasks. 300s is more realistic for Claude Code execution. Progress spinner prevents developer from thinking the system has frozen during long executions. Helpful timeout message tells the developer exactly how to retry.
+**Alternatives considered:** Async streaming output — claude --print does not support streaming, spinner is the practical alternative.
+
 ---
 
 _Last updated: 2026-04-08_

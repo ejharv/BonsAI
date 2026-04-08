@@ -100,7 +100,10 @@ def run_task(args) -> bool:
         success_criteria=f"Task completed: {args.task}",
     )
 
-    result = executor.execute(prompt, timeout_seconds=180)
+    result = executor.execute(
+        prompt,
+        timeout_seconds=getattr(args, "timeout", 300),
+    )
 
     if result.file_writes:
         for path, content in result.file_writes.items():
@@ -110,7 +113,23 @@ def run_task(args) -> bool:
             print_success(f"Wrote: {path}")
 
     if result.status == ExecutorStatus.TIMEOUT:
-        print_error("Task timed out after 180s")
+        print_error(
+            f"Task timed out after "
+            f"{getattr(args, 'timeout', 300)}s."
+        )
+        print()
+        print(
+            "  The agent was still "
+            "thinking when time ran out."
+        )
+        print(
+            "  Try again with a longer "
+            "timeout:"
+        )
+        print(
+            f"  bonsai run \"{args.task}\""
+            f" --timeout 600"
+        )
         return False
 
     if result.status == ExecutorStatus.FAILED:

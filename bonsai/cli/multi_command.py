@@ -69,7 +69,9 @@ def run_multi(args) -> bool:
         prune_threshold=0.2,
         warn_threshold=0.4,
         synthesis_budget_fraction=0.15,
-        timeout_per_node_seconds=180,
+        timeout_per_node_seconds=getattr(
+            args, "timeout", 300
+        ),
     )
 
     orchestrator = Orchestrator(
