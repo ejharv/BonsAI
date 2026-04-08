@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 2 complete — root manager implemented and tested**
+**Phase 3 interface complete — reconnaissance agent interface defined**
 
 ---
 
@@ -26,6 +26,11 @@
   - `RootWriter` — serializes typed structures back to `.md`, marks files DIRTY, handles table upserts
   - `RootManager` — composes reader and writer, manages session cache, implements `begin_session` / `end_session`
   - 24 unit tests in `tests/test_root_manager.py` — all passing
+- Reconnaissance agent interface defined
+  - `agents/reconnaissance/models.py` — all typed inputs and outputs contracted
+  - `agents/reconnaissance/agent.py` — full ten-step pipeline contracted, all methods raise NotImplementedError
+  - Graphify integration decided: graphify runs once at onboarding, roots/ owns continuous updates
+  - Three decisions recorded in project/decisions.md
 
 ---
 
@@ -37,10 +42,11 @@ _Nothing._
 
 ## Next
 
-- **Reconnaissance agent — Phase 3** — first real agent that reads an existing codebase and populates the root system
-  - Reads project files and extracts module map
-  - Populates `context/codebase.md` and `context/dependencies.md` via RootManager
-  - Produces initial `project/state.md` for a brownfield project
+- **Reconnaissance agent implementation — Phase 3** — implement all NotImplementedError stubs in agent.py
+  - Implement `scan_project_structure`, `load_graphify_report`, `identify_domains`
+  - Implement `detect_patterns`, `analyze_git_history`, `identify_gaps`, `propose_roster`
+  - Implement `write_to_roots` and the top-level `run` pipeline
+  - Write tests covering the full pipeline
 
 ---
 
@@ -61,6 +67,12 @@ Root manager interface defined. `root_manager/models.py` establishes all typed s
 **Session: 2026-04-07**
 
 Root manager implemented in full. All `NotImplementedError` stubs replaced with working Python code. `RootReader` parses `.md` files into typed structures using a generic `_parse_table` helper and dedicated parsers for `ProjectState` and `DecisionEntry`. `RootWriter` serializes typed structures back to `.md` using a phase-based `_split_at_table` helper that cleanly separates pre/table/post content, enabling safe upsert and append operations. `RootManager` composes both, manages session-level file status cache from region index files, and implements `begin_session`/`end_session`/`needs_reread`. 24 unit tests written and all passing. `MarkdownTableParser` pattern registered in `context/patterns.md`. Codebase map updated to reflect implemented status. Phase 2 complete.
+
+---
+
+**Session: 2026-04-07**
+
+Reconnaissance agent interface defined. Three decisions recorded: graphify integration strategy, graphify lifecycle boundary, and reconnaissance read-only constraint. `agents/reconnaissance/models.py` defines `ConfidenceLevel`, `GapSeverity`, `ObservedDomain`, `DetectedPattern`, `DeveloperGap`, `ReconnaissanceInput`, and `ReconnaissanceOutput` — all as dataclasses with full field documentation. `agents/reconnaissance/agent.py` defines `ReconnaissanceAgent` with a ten-step `run` pipeline and seven dedicated methods — all raising `NotImplementedError`. Codebase map, dependency map, state, and ROOT.md updated. Phase 3 interface complete.
 
 ---
 

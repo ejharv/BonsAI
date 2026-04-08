@@ -23,6 +23,8 @@ The Architect writes to this file when establishing structural contracts. The Bu
 | `root_manager/reader.py` | `root_manager/models.py` | `root_manager/manager.py`, all agents | `critical` |
 | `root_manager/writer.py` | `root_manager/models.py` | `root_manager/manager.py`, all agents | `critical` |
 | `root_manager/manager.py` | `root_manager/reader.py`, `root_manager/writer.py`, `root_manager/models.py` | all agents | `critical` |
+| `agents/reconnaissance/models.py` | nothing external | `agents/reconnaissance/agent.py` | `critical` |
+| `agents/reconnaissance/agent.py` | `root_manager/manager.py`, `agents/reconnaissance/models.py` | nothing yet | `high` |
 
 Criticality values:
 - `critical` — removing this component breaks core flows

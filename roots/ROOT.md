@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 2 complete — root manager implemented and tested**
+**Phase 3 — Reconnaissance agent interface defined**
 
-The seed, invariants, lifecycle, and root manager are all fully implemented and tested. `RootReader` parses `.md` files into typed structures. `RootWriter` serializes typed structures back to `.md` and marks files DIRTY. `RootManager` composes both and manages session lifecycle. 24 unit tests passing.
+Brownfield onboarding agent interface fully contracted. `agents/reconnaissance/models.py` defines all typed inputs and outputs: `ConfidenceLevel`, `GapSeverity`, `ObservedDomain`, `DetectedPattern`, `DeveloperGap`, `ReconnaissanceInput`, `ReconnaissanceOutput`. `agents/reconnaissance/agent.py` defines the full pipeline — ten-step `run` contract plus seven dedicated methods, all raising `NotImplementedError`. Graphify integration decided and recorded.
 
 ---
 
