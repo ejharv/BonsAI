@@ -54,10 +54,13 @@ _EXCLUDED_DIRS = {
     "vendor", "bower_components",
 }
 
-# Folder names that are never domains (support/meta folders)
+# Folder names that are never domains — pure tooling, config, or dependency dirs.
+# Do NOT add asset/content/script folders here — they can be real domains
+# (e.g. public/ in a static site, scripts/ with operational email flows).
 _NON_DOMAIN_FOLDERS = {
-    "tests", "test", "__tests__", "docs", "documentation",
-    "scripts", "tools", "bin", "assets", "static", "public",
+    "tests", "test", "__tests__",
+    "docs", "documentation",
+    "tools", "bin",
     "node_modules", ".git",
 }
 
@@ -520,7 +523,10 @@ class ReconnaissanceAgent:
                         except OSError:
                             pass
 
-                if filename in _ENTRY_POINTS:
+                # Entry points only within 2 directory levels of project root.
+                # A file at depth 3+ (e.g. supabase/functions/fn/index.ts)
+                # is an internal module entry, not a project entry point.
+                if filename in _ENTRY_POINTS and len(rel_parts) <= 2:
                     entry_points.append(rel_str)
 
         return {
@@ -606,6 +612,11 @@ class ReconnaissanceAgent:
                 add_signal(norm, f"graphify community: {community_line}", strength=1)
 
         # --- Signal 3: config file signals ---
+        # Build set of all folder names in the project for existence checks.
+        _all_folder_names = {
+            _normalize_name(Path(f).name)
+            for f in structure.get("folders", [])
+        }
         requirements = structure.get("manifest_contents", {}).get("requirements", [])
         for req in requirements:
             pkg_name = (
@@ -613,7 +624,11 @@ class ReconnaissanceAgent:
             )
             if pkg_name in _PACKAGE_DOMAIN_HINTS:
                 domain_name = _PACKAGE_DOMAIN_HINTS[pkg_name]
-                add_signal(domain_name, f"requirements: {pkg_name} found")
+                # Only emit signal if a folder with that name exists in the project.
+                # Prevents false positives when a framework is used inside one domain
+                # but has no corresponding top-level or subdomain folder.
+                if domain_name in _all_folder_names:
+                    add_signal(domain_name, f"requirements: {pkg_name} found")
 
         package_json = structure.get("manifest_contents", {}).get("package_json", {})
         for script_name in package_json.get("scripts", {}):
@@ -667,14 +682,16 @@ class ReconnaissanceAgent:
                 dependencies=deps,
             ))
 
-        # Confidence adjustment from git signals — lower MEDIUM to LOW
-        # for folders with no recent activity (may be deprecated or stable)
+        # Confidence adjustment from git signals — demote domains with no
+        # recent activity: HIGH → MEDIUM, MEDIUM → LOW.
         if self._git_signals:
             recent = self._git_signals.get("recent_activity", {})
             for domain in domains:
                 has_recent = recent.get(domain.name, True)
                 if not has_recent:
-                    if domain.confidence == ConfidenceLevel.MEDIUM:
+                    if domain.confidence == ConfidenceLevel.HIGH:
+                        domain.confidence = ConfidenceLevel.MEDIUM
+                    elif domain.confidence == ConfidenceLevel.MEDIUM:
                         domain.confidence = ConfidenceLevel.LOW
                     domain.evidence.append(
                         "low recent git activity — may be deprecated or stable"
