@@ -6,9 +6,9 @@
 
 ## Current State
 
-**Phase 1 complete. Core structural contracts defined.**
+**Phase 2 complete. Root manager implemented and tested.**
 
-Three modules written. No implementation logic exists yet. All modules contain contracts, dataclasses, and interfaces only.
+Seven modules written. Core contracts defined and implemented. Root manager provides full read/write access to the roots/ file system.
 
 ---
 
@@ -37,10 +37,11 @@ core/
 | `core/seed/seed.py` | Seed dataclass and all component structures (Identity, Contract, ResourceEnvelope, CapabilityNeed, GrowthConditions, Signal, Closure) | Architect | `defined` | 2026-04-07 |
 | `core/invariants/invariants.py` | Three invariant contracts: intent coherence, budget conservation, signal propagation | Architect | `defined` | 2026-04-07 |
 | `core/lifecycle/lifecycle.py` | Lifecycle stages enum and all valid state transitions | Architect | `defined` | 2026-04-07 |
-| `root_manager/models.py` | Typed representations of all roots/ structures: FileStatus, Freshness, RootFile, RegionIndex, ProjectState, DecisionEntry, CodebaseEntry, DependencyEntry, RootManagerResult | Architect | `defined` | 2026-04-07 |
-| `root_manager/reader.py` | All read operations against roots/; parses .md content into typed structures; returns RootManagerResult | Architect | `defined` | 2026-04-07 |
-| `root_manager/writer.py` | All write operations against roots/; serializes typed structures to .md; marks files DIRTY after every write | Architect | `defined` | 2026-04-07 |
-| `root_manager/manager.py` | Single interface between agents and roots/; composes reader and writer; manages session-level file status cache | Architect | `defined` | 2026-04-07 |
+| `root_manager/models.py` | Typed representations of all roots/ structures: FileStatus, Freshness, RootFile, RegionIndex, ProjectState, DecisionEntry, CodebaseEntry, DependencyEntry, RootManagerResult | Architect | `implemented` | 2026-04-07 |
+| `root_manager/reader.py` | All read operations against roots/; parses .md content into typed structures; returns RootManagerResult | Builder | `implemented` | 2026-04-07 |
+| `root_manager/writer.py` | All write operations against roots/; serializes typed structures to .md; marks files DIRTY after every write | Builder | `implemented` | 2026-04-07 |
+| `root_manager/manager.py` | Single interface between agents and roots/; composes reader and writer; manages session-level file status cache | Builder | `implemented` | 2026-04-07 |
+| `tests/test_root_manager.py` | 24 unit tests covering RootReader, RootWriter, and RootManager — all passing | Builder | `complete` | 2026-04-07 |
 
 Status values: `defined` (interface exists, no implementation) → `in progress` → `complete` → `deprecated`
 
@@ -58,4 +59,4 @@ The Builder is responsible for keeping this file current. A codebase.md that lag
 
 ---
 
-_Last updated: 2026-04-07 (Phase 1)_
+_Last updated: 2026-04-07 (Phase 2)_

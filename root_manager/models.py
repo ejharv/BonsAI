@@ -150,3 +150,21 @@ class RootManagerResult:
     path: str
     data: Optional[any] = None
     error: Optional[str] = None
+
+    @classmethod
+    def ok(
+        cls,
+        path: str,
+        data: any = None,
+    ) -> "RootManagerResult":
+        """Convenience constructor for successful results."""
+        return cls(success=True, path=path, data=data)
+
+    @classmethod
+    def fail(
+        cls,
+        path: str,
+        error: str,
+    ) -> "RootManagerResult":
+        """Convenience constructor for failed results."""
+        return cls(success=False, path=path, error=error)

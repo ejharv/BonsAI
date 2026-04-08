@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 1 complete — all core interfaces defined**
+**Phase 2 complete — root manager implemented and tested**
 
-The seed, invariants, lifecycle, and root manager interface are all defined as typed contracts. No implementation logic exists yet. All methods raise `NotImplementedError` — ready for Phase 2.
+The seed, invariants, lifecycle, and root manager are all fully implemented and tested. `RootReader` parses `.md` files into typed structures. `RootWriter` serializes typed structures back to `.md` and marks files DIRTY. `RootManager` composes both and manages session lifecycle. 24 unit tests passing.
 
 ---
 
@@ -28,9 +28,9 @@ The seed, invariants, lifecycle, and root manager interface are all defined as t
 
 | Region | Status | Notes |
 |--------|--------|-------|
-| project/ | in progress | Vision, state, and decisions written; state reflects Phase 1 complete |
+| project/ | in progress | Vision, state, and decisions written; state reflects Phase 2 complete |
 | agents/ | initialized | All five agent definitions written |
-| context/ | in progress | Codebase map and dependency map populated with Phase 1 + root manager modules |
+| context/ | in progress | Codebase map updated (Phase 2); dependency map current; patterns registry has first entry |
 | quality/ | initialized | Schema defined, no entries yet |
 | flows/ | initialized | Greenfield and brownfield flows written |
 
@@ -40,9 +40,9 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**Root manager implementation — Phase 2.**
+**Reconnaissance agent — Phase 3.**
 
-Make the `NotImplementedError` stubs in `root_manager/` into working code. Reader parses `.md` into typed structures. Writer serializes typed structures to `.md` and marks files DIRTY. Manager composes both and handles session lifecycle.
+First real agent that reads an existing codebase and populates the root system. Uses `RootManager` to write `context/codebase.md` and `context/dependencies.md` from static analysis of a target project.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
