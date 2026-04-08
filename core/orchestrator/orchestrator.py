@@ -236,6 +236,13 @@ class Orchestrator:
         node.raw_output = result.raw_output
         node.record_budget_consumed(result.budget_usage.budget_consumed)
 
+        if result.file_writes:
+            for path, content in result.file_writes.items():
+                full = Path(".") / path
+                full.parent.mkdir(parents=True, exist_ok=True)
+                full.write_text(content)
+                print(f"  Wrote: {path}")
+
         if result.status == ExecutorStatus.TIMEOUT:
             return self._prune_node(node, "Execution timed out")
 
@@ -297,11 +304,18 @@ class Orchestrator:
                 )
 
                 if result.roots_updates:
+                    from bonsai.cli.run_command import _is_valid_roots_content
                     for path, content in result.roots_updates.items():
                         if path.startswith("roots/"):
-                            full = Path(".") / path
-                            full.parent.mkdir(parents=True, exist_ok=True)
-                            full.write_text(content)
+                            if _is_valid_roots_content(path, content):
+                                full = Path(".") / path
+                                full.parent.mkdir(parents=True, exist_ok=True)
+                                full.write_text(content)
+                            else:
+                                print(
+                                    f"Warning: rejected roots update for "
+                                    f"{path} — content failed validation"
+                                )
 
                 node.status = NodeStatus.COMPLETE
                 return node.to_result(NodeStatus.COMPLETE, child_results)
@@ -311,11 +325,18 @@ class Orchestrator:
             node.transition_to(LifecycleStage.CLOSING)
 
         if result.roots_updates:
+            from bonsai.cli.run_command import _is_valid_roots_content
             for path, content in result.roots_updates.items():
                 if path.startswith("roots/"):
-                    full = Path(".") / path
-                    full.parent.mkdir(parents=True, exist_ok=True)
-                    full.write_text(content)
+                    if _is_valid_roots_content(path, content):
+                        full = Path(".") / path
+                        full.parent.mkdir(parents=True, exist_ok=True)
+                        full.write_text(content)
+                    else:
+                        print(
+                            f"Warning: rejected roots update for "
+                            f"{path} — content failed validation"
+                        )
 
         return node.to_result(NodeStatus.COMPLETE, [])
 

@@ -11,6 +11,7 @@ import time
 from core.executor.base import (
     BaseExecutor,
     _parse_roots_updates,
+    _parse_file_writes,
 )
 from core.executor.models import (
     AgentPrompt,
@@ -86,6 +87,7 @@ class ClaudeCodeExecutor(BaseExecutor):
                     ),
                 ),
                 roots_updates={},
+                file_writes={},
                 error=f"Execution timed out after {timeout_seconds}s",
             )
         except Exception as e:
@@ -101,6 +103,7 @@ class ClaudeCodeExecutor(BaseExecutor):
                     budget_consumed=self._calculate_budget(wall_time, 0),
                 ),
                 roots_updates={},
+                file_writes={},
                 error=str(e),
             )
 
@@ -124,6 +127,7 @@ class ClaudeCodeExecutor(BaseExecutor):
                 ),
             ),
             roots_updates=_parse_roots_updates(raw_output),
+            file_writes=_parse_file_writes(raw_output),
             error=(
                 None if result.returncode == 0 else result.stderr
             ),

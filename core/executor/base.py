@@ -39,6 +39,31 @@ def _parse_roots_updates(
     }
 
 
+def _parse_file_writes(
+    raw_output: str,
+) -> dict[str, str]:
+    """
+    Parse <file_write> XML tags from
+    agent output.
+    Extract path attribute and content.
+    Return dict mapping path to content.
+    Only paths that do NOT start with
+    roots/ are included here.
+    roots/ paths go to roots_updates.
+    Return empty dict if no tags found.
+    Shared by all executor backends.
+    """
+    pattern = re.compile(
+        r'<file_write\s+path="([^"]+)">(.*?)</file_write>',
+        re.DOTALL,
+    )
+    return {
+        match.group(1).strip(): match.group(2).strip()
+        for match in pattern.finditer(raw_output)
+        if not match.group(1).strip().startswith("roots/")
+    }
+
+
 class BaseExecutor(ABC):
     """
     Abstract executor. Receives an
@@ -143,6 +168,16 @@ class BaseExecutor(ABC):
             parts.append("[provide complete file content]")
             parts.append("</root_update>")
             parts.append("")
+
+        parts.append(
+            "For changes to source code files outside roots/ provide the "
+            "complete file content between file tags:\n\n"
+            '<file_write path="core/example/file.py">\n'
+            "complete file content here\n"
+            "</file_write>\n\n"
+            "Bonsai will write these files directly after execution."
+        )
+        parts.append("")
 
         parts.append("## Budget Awareness")
         parts.append(

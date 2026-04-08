@@ -11,6 +11,7 @@ import time
 from core.executor.base import (
     BaseExecutor,
     _parse_roots_updates,
+    _parse_file_writes,
 )
 from core.executor.models import (
     AgentPrompt,
@@ -78,6 +79,7 @@ class APIExecutor(BaseExecutor):
                     budget_consumed=0,
                 ),
                 roots_updates={},
+                file_writes={},
                 error=(
                     "anthropic SDK not installed."
                     " Run: pip install anthropic"
@@ -117,6 +119,7 @@ class APIExecutor(BaseExecutor):
                     ),
                 ),
                 roots_updates=_parse_roots_updates(raw_output),
+                file_writes=_parse_file_writes(raw_output),
                 error=None,
             )
 
@@ -133,6 +136,7 @@ class APIExecutor(BaseExecutor):
                     budget_consumed=0,
                 ),
                 roots_updates={},
+                file_writes={},
                 error=str(e),
             )
 

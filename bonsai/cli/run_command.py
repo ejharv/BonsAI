@@ -102,6 +102,13 @@ def run_task(args) -> bool:
 
     result = executor.execute(prompt, timeout_seconds=180)
 
+    if result.file_writes:
+        for path, content in result.file_writes.items():
+            full = project_path / path
+            full.parent.mkdir(parents=True, exist_ok=True)
+            full.write_text(content)
+            print_success(f"Wrote: {path}")
+
     if result.status == ExecutorStatus.TIMEOUT:
         print_error("Task timed out after 180s")
         return False
@@ -297,6 +304,28 @@ def _load_agent_context(
     )
 
 
+def _is_valid_roots_content(
+    path: str,
+    content: str,
+) -> bool:
+    """
+    Basic validation that agent-provided
+    roots content looks like markdown
+    and not a stripped schema.
+    Returns False if content is
+    suspiciously short (under 50 chars)
+    or missing expected markdown
+    structure for known files.
+    """
+    if len(content.strip()) < 50:
+        return False
+    if "state.md" in path:
+        return "##" in content
+    if "codebase.md" in path:
+        return "|" in content
+    return True
+
+
 def _apply_roots_updates(
     updates: dict[str, str],
     project_path: Path,
@@ -305,10 +334,17 @@ def _apply_roots_updates(
     """
     Apply roots updates from executor.
     Only paths starting with roots/ are written.
+    Content is validated before writing.
     """
     applied = []
     for path, content in updates.items():
         if not path.startswith("roots/"):
+            continue
+        if not _is_valid_roots_content(path, content):
+            print(
+                f"Warning: rejected roots update for {path} "
+                f"— content failed validation"
+            )
             continue
         full_path = project_path / path
         try:

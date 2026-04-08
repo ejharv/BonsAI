@@ -130,6 +130,13 @@ class ExecutorResult:
         the agent wants to write
         Bonsai applies these after
         verifying they are safe
+    file_writes: source code files
+        the agent wants to write
+        Keys are relative paths from
+        project root.
+        Values are complete file content.
+        Applied by orchestrator after
+        execution. Only non-roots/ paths.
     error: error message if status
         is FAILED or TIMEOUT
     """
@@ -137,4 +144,5 @@ class ExecutorResult:
     raw_output: str
     budget_usage: BudgetUsage
     roots_updates: dict[str, str]
+    file_writes: dict[str, str] = field(default_factory=dict)
     error: Optional[str] = None
