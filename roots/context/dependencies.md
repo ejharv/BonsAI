@@ -16,7 +16,9 @@ The Architect writes to this file when establishing structural contracts. The Bu
 
 | Component | Depends On | Depended On By | Criticality |
 |-----------|-----------|----------------|-------------|
-| — | — | — | — |
+| `core/seed/seed.py` | nothing external | `core/invariants/invariants.py`, everything that executes a seed | `critical` |
+| `core/invariants/invariants.py` | `core/seed/seed.py` | everything that executes a seed | `critical` |
+| `core/lifecycle/lifecycle.py` | nothing external | everything that transitions a seed | `critical` |
 
 Criticality values:
 - `critical` — removing this component breaks core flows
@@ -38,4 +40,4 @@ A pruning proposal without a blast radius assessment will not be approved.
 
 ---
 
-_Last updated: 2026-04-07_
+_Last updated: 2026-04-07 (Phase 1)_

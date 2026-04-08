@@ -6,29 +6,32 @@
 
 ## Current Phase
 
-**Phase 0 — Root system initialization**
+**Phase 1 complete — Core seed defined**
 
 ---
 
 ## Completed
 
-_Nothing yet. Phase 0 is the beginning._
+- Root system initialization — `roots/` directory structure and all foundational `.md` files
+- Seed definition in code — `core/seed/seed.py`, `core/invariants/invariants.py`, `core/lifecycle/lifecycle.py`
+  - All structures as dataclasses, no implementation logic
+  - Three invariants defined as `NotImplementedError` contracts
+  - Full lifecycle state machine with all valid transitions
 
 ---
 
 ## In Progress
 
-- Root system initialization — creating the `roots/` directory structure and populating all foundational `.md` files
+_Nothing. Phase 1 is complete._
 
 ---
 
 ## Next
 
-- **Seed definition in code** — Architect derives the first structural interfaces:
-  - `Seed` type (project specification schema)
-  - `Flow` runner contract
-  - `Agent` base interface
-  - No implementation; contracts and interfaces only
+- **Root manager** — the interface between agents and the `.md` file system
+  - Reads and writes `roots/` files on behalf of agents
+  - Provides structured access to state, decisions, codebase map, and dependency map
+  - No agent should touch `.md` files directly; all access goes through the root manager
 
 ---
 
@@ -42,7 +45,7 @@ _None._
 
 **Session: 2026-04-07**
 
-Initial root system creation. The `roots/` directory was scaffolded from scratch with all required regions: `project/`, `agents/`, `context/`, `quality/`, and `flows/`. All index files, agent definitions, context schemas, quality schemas, and flow definitions were written. Git repository initialized and root system committed as Phase 0.
+Phase 1 complete. Core structural contracts written in Python. `core/seed/seed.py` defines the Seed and all seven component dataclasses. `core/invariants/invariants.py` defines the three system invariants as `NotImplementedError` contracts. `core/lifecycle/lifecycle.py` defines the six lifecycle stages and eleven valid transitions. Two architectural decisions recorded. Codebase map and dependency map updated. Root system pushed to main.
 
 ---
 

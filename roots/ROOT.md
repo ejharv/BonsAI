@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 0 — Root system initialization**
+**Phase 1 — Core seed defined**
 
-The structural skeleton is being established. No code has been written. The root system exists to give every future agent a shared, traversable context map before a single line of implementation is produced.
+The structural contracts are established. `core/seed/seed.py` defines the Seed and all component dataclasses. Invariants and lifecycle are defined as contracts. No implementation logic exists yet.
 
 ---
 
@@ -28,9 +28,9 @@ The structural skeleton is being established. No code has been written. The root
 
 | Region | Status | Notes |
 |--------|--------|-------|
-| project/ | initialized | Vision, state, and decisions written |
+| project/ | in progress | Vision, state, and decisions written; state reflects Phase 1 complete |
 | agents/ | initialized | All five agent definitions written |
-| context/ | initialized | Schema defined, no entries yet |
+| context/ | in progress | Codebase map and dependency map populated with Phase 1 modules |
 | quality/ | initialized | Schema defined, no entries yet |
 | flows/ | initialized | Greenfield and brownfield flows written |
 
@@ -40,9 +40,9 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**Seed definition in code.**
+**Root manager.**
 
-With the root system in place, the Architect agent should derive the first structural interfaces: the `Seed` type (project specification schema), the `Flow` runner contract, and the `Agent` base interface. These become the trunk from which all branches grow. No implementation yet — contracts and interfaces only.
+The interface between agents and the `.md` file system. Agents should never touch root files directly — all reads and writes go through the root manager. This is the first piece of runtime infrastructure.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 

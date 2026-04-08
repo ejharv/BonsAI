@@ -6,17 +6,27 @@
 
 ## Current State
 
-**Empty. Initialization phase.**
+**Phase 1 complete. Core structural contracts defined.**
 
-No implementation code exists yet. This file will be populated after the first build phase, beginning with the seed interfaces defined by the Architect.
+Three modules written. No implementation logic exists yet. All modules contain contracts, dataclasses, and interfaces only.
 
 ---
 
 ## Structure
 
-To be populated after first build phase.
-
-Expected first entries: `Seed` type, `Flow` runner contract, `Agent` base interface.
+```
+core/
+├── __init__.py
+├── seed/
+│   ├── __init__.py
+│   └── seed.py
+├── invariants/
+│   ├── __init__.py
+│   └── invariants.py
+└── lifecycle/
+    ├── __init__.py
+    └── lifecycle.py
+```
 
 ---
 
@@ -24,7 +34,9 @@ Expected first entries: `Seed` type, `Flow` runner contract, `Agent` base interf
 
 | Module Name | Purpose | Owner Agent | Status | Last Modified |
 |-------------|---------|-------------|--------|---------------|
-| — | — | — | — | — |
+| `core/seed/seed.py` | Seed dataclass and all component structures (Identity, Contract, ResourceEnvelope, CapabilityNeed, GrowthConditions, Signal, Closure) | Architect | `defined` | 2026-04-07 |
+| `core/invariants/invariants.py` | Three invariant contracts: intent coherence, budget conservation, signal propagation | Architect | `defined` | 2026-04-07 |
+| `core/lifecycle/lifecycle.py` | Lifecycle stages enum and all valid state transitions | Architect | `defined` | 2026-04-07 |
 
 Status values: `defined` (interface exists, no implementation) → `in progress` → `complete` → `deprecated`
 
@@ -42,4 +54,4 @@ The Builder is responsible for keeping this file current. A codebase.md that lag
 
 ---
 
-_Last updated: 2026-04-07_
+_Last updated: 2026-04-07 (Phase 1)_
