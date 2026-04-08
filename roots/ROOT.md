@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 5 complete — bonsai run working, system is self-building**
+**Phase 6 in progress — orchestrator implemented**
 
-`bonsai run` fully implemented. Two executor backends (claude_code and api). 26 executor tests passing. Smoke tested: `bonsai run` routed to builder, executed via claude CLI, applied roots updates, consumed 7.59 budget units. Agent implemented `check_budget_conservation` in `core/invariants/invariants.py`.
+`bonsai run-multi` wired. Orchestrator manages multi-agent execution trees with agent-driven branching via `<branch_request>` tags. Node lifecycle (GERMINATING → GROWING → BRANCHING → CLOSING) fully enforced. Budget allocation and signal aggregation across children implemented. Two remaining stubs: `check_intent_coherence` and `check_signal_propagation` in invariants (orchestrator guards around them gracefully until implemented).
 
 ---
 
@@ -40,12 +40,12 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**Phase 6 — Orchestrator.**
+**Phase 6 smoke test, then invariant completion.**
 
-Multi-agent runs with real seed lifecycle. GERMINATING → GROWING → BRANCHING → CLOSING state machine. Budget allocation across multiple agents. Child seed spawning on complexity threshold. Signal aggregation from child results.
+Run `bonsai run-multi` against BonsAI itself to verify tree output and branching behavior. Then implement `check_intent_coherence` and `check_signal_propagation` to harden invariant enforcement.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
 ---
 
-_Last updated: 2026-04-08 (Phase 5 complete)_
+_Last updated: 2026-04-08 (Phase 6 orchestrator implemented)_

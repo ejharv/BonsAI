@@ -118,6 +118,40 @@ def main():
         )
     )
 
+    # bonsai run-multi
+    multi_parser = subparsers.add_parser(
+        "run-multi",
+        help=(
+            "Run a task with full "
+            "multi-agent orchestration. "
+            "Supports agent-driven "
+            "branching and child spawning."
+        )
+    )
+    multi_parser.add_argument(
+        "task",
+        help="Task description."
+    )
+    multi_parser.add_argument(
+        "--executor",
+        choices=["claude_code", "api"],
+        default=None,
+    )
+    multi_parser.add_argument(
+        "--agent",
+        default="builder",
+    )
+    multi_parser.add_argument(
+        "--budget",
+        type=float,
+        default=20.0,
+    )
+    multi_parser.add_argument(
+        "--max-depth",
+        type=int,
+        default=3,
+    )
+
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(0)
@@ -131,6 +165,11 @@ def main():
         from bonsai.cli.run_command \
             import run_task
         success = run_task(args)
+        sys.exit(0 if success else 1)
+    elif args.command == "run-multi":
+        from bonsai.cli.multi_command \
+            import run_multi
+        success = run_multi(args)
         sys.exit(0 if success else 1)
     else:
         parser.print_help()

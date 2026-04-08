@@ -6,9 +6,9 @@
 
 ## Current State
 
-**Phase 5 complete. bonsai run working.**
+**Phase 6 in progress. Orchestrator interfaces defined and implemented.**
 
-Twenty-one modules tracked. Core contracts, root manager, reconnaissance agent, CLI, and executor layer all complete. `bonsai run` is live — system is self-building.
+Twenty-five modules tracked. Core contracts, root manager, reconnaissance agent, CLI, executor layer, and orchestrator all present. `bonsai run-multi` wired — multi-agent execution tree with agent-driven branching.
 
 ---
 
@@ -26,12 +26,17 @@ core/
 ├── lifecycle/
 │   ├── __init__.py
 │   └── lifecycle.py
-└── executor/
+├── executor/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── base.py
+│   ├── claude_code.py
+│   └── api.py
+└── orchestrator/
     ├── __init__.py
     ├── models.py
-    ├── base.py
-    ├── claude_code.py
-    └── api.py
+    ├── node.py
+    └── orchestrator.py
 ```
 
 ---
@@ -61,6 +66,10 @@ core/
 | `tests/test_reconnaissance.py` | 31 unit tests covering ReconnaissanceAgent pipeline, domain identification, pattern detection, gap analysis, roster proposal, and write_to_roots — all passing | Builder | `complete` | 2026-04-08 |
 | `tests/test_cli.py` | 18 unit tests covering _initialize_roots, display functions, _write_bonsai_config, and run_init integration — all passing | Builder | `complete` | 2026-04-08 |
 | `tests/test_executor.py` | 26 unit tests covering ClaudeCodeExecutor, APIExecutor, _load_bonsai_config, and _route_task — all passing | Builder | `complete` | 2026-04-08 |
+| `core/orchestrator/models.py` | Typed structures for orchestrator runtime: NodeStatus, BranchRequest, BranchingSignal, NodeResult, OrchestratorConfig, RunResult | Architect | `implemented` | 2026-04-08 |
+| `core/orchestrator/node.py` | Node — live Seed in execution; wraps Seed with stage, status, children, executor; all methods implemented | Builder | `implemented` | 2026-04-08 |
+| `core/orchestrator/orchestrator.py` | Orchestrator — manages multi-agent execution trees; agent-driven branching; budget allocation; signal aggregation; all methods implemented | Builder | `implemented` | 2026-04-08 |
+| `bonsai/cli/multi_command.py` | Implementation of `bonsai run-multi`; wires Orchestrator to CLI; print_run_result with tree output | Builder | `implemented` | 2026-04-08 |
 
 Status values: `defined` (interface exists, no implementation) → `in progress` → `implemented` → `complete` → `deprecated`
 
@@ -78,4 +87,4 @@ The Builder is responsible for keeping this file current. A codebase.md that lag
 
 ---
 
-_Last updated: 2026-04-08 (Phase 5 complete)_
+_Last updated: 2026-04-08 (Phase 6 orchestrator implemented)_

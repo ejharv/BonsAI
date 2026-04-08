@@ -39,6 +39,16 @@
 **Rationale:** Simple keyword matching routes tasks to agents for the first implementation. Sufficient for Phase 5. Will be replaced with semantic routing using embeddings in a future phase when the system has enough usage data to validate routing accuracy.
 **Alternatives considered:** Embedding similarity routing — deferred, adds complexity before we have evidence simple routing fails.
 
+### Decision: "Agent-driven branching — agents request child spawning via structured output tags"
+**Date:** 2026-04-08
+**Rationale:** The executing agent has more context about task complexity than any pre-analysis heuristic. Agents signal branching need via `<branch_request>` tags in their output. The orchestrator reads these signals and spawns child seeds with sub-envelopes carved from the parent's remaining budget. Over-branching is prevented by the budget envelope — children cannot spawn if headroom is below `min_branch_size` threshold. Branching is more efficient not less — child agents carry narrow focused context rather than full task context. Parent role shrinks to decomposition and synthesis.
+**Alternatives considered:** Orchestrator pre-analysis branching — rejected because it loses the agent's nuanced understanding of task complexity.
+
+### Decision: "Orchestrator owns all lifecycle transitions — no other component touches stages"
+**Date:** 2026-04-08
+**Rationale:** Centralizing lifecycle management in the orchestrator prevents race conditions and invalid transitions in concurrent execution. Clear ownership makes debugging straightforward — if a node is in the wrong stage the orchestrator is always where to look.
+**Alternatives considered:** Nodes manage their own transitions — rejected because it distributes lifecycle logic across the codebase making invariant enforcement harder.
+
 ---
 
 _Last updated: 2026-04-08_

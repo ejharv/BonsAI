@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 5 complete — bonsai run working, system is self-building**
+**Phase 6 in progress — orchestrator implemented, multi-agent runs available**
 
 ---
 
@@ -57,22 +57,26 @@
   - 26 unit tests in `tests/test_executor.py` — all passing
   - Smoke tested: `bonsai run` routed to builder, executed via claude_code, applied roots updates, 7.59 budget units, 70.8s
   - `check_budget_conservation` implemented in `core/invariants/invariants.py` by smoke test agent
+- Orchestrator layer implemented
+  - `core/orchestrator/models.py` — NodeStatus, BranchRequest, BranchingSignal, NodeResult, OrchestratorConfig, RunResult
+  - `core/orchestrator/node.py` — Node (live Seed in execution): transition_to, record_budget_consumed, update_signal, to_result, make_seed all implemented
+  - `core/orchestrator/orchestrator.py` — Orchestrator: __init__, run, _execute_node, _build_prompt, _parse_branching_signal, _spawn_children, _aggregate_signal, _prune_node, _build_run_result, _load_agent_context_for_node, _validate_transition all implemented
+  - `bonsai/cli/multi_command.py` — run_multi, print_run_result, _print_node_tree implemented
+  - `bonsai/__main__.py` — run-multi subcommand added
+  - Two decisions recorded: agent-driven branching, orchestrator lifecycle ownership
 
 ---
 
 ## In Progress
 
-_Nothing._
+_Orchestrator smoke test pending._
 
 ---
 
 ## Next
 
-- **Phase 6 — Orchestrator** — multi-agent runs with real seed lifecycle
-  - Manages GERMINATING → GROWING → BRANCHING → CLOSING state machine
-  - Budget allocation across multiple agents
-  - Child seed spawning when complexity threshold exceeded
-  - Signal aggregation from child results
+- **Phase 6 smoke test** — run `bonsai run-multi` against BonsAI itself and verify tree output
+- **Phase 6 complete** — implement `check_intent_coherence` and `check_signal_propagation` invariants (currently raise NotImplementedError; orchestrator guards around them gracefully)
 
 ---
 
@@ -90,4 +94,4 @@ Phase 5 complete. Executor layer implemented in full. `core/executor/base.py` �
 
 ---
 
-_Last updated: 2026-04-08_
+_Last updated: 2026-04-08 (Phase 6 orchestrator implemented)_
