@@ -37,6 +37,11 @@ The Architect writes to this file when establishing structural contracts. The Bu
 | `core/orchestrator/node.py` | `core/seed/seed.py`, `core/lifecycle/lifecycle.py`, `core/executor/base.py`, `core/orchestrator/models.py` | `core/orchestrator/orchestrator.py` | `critical` |
 | `core/orchestrator/orchestrator.py` | `core/orchestrator/node.py`, `core/orchestrator/models.py`, `core/seed/seed.py`, `core/lifecycle/lifecycle.py`, `core/invariants/invariants.py`, `core/executor/base.py`, `root_manager/manager.py`, `bonsai/cli/run_command.py` | `bonsai/cli/multi_command.py` | `critical` |
 | `bonsai/cli/multi_command.py` | `core/orchestrator/orchestrator.py`, `core/orchestrator/models.py`, `bonsai/cli/run_command.py`, `bonsai/cli/display.py`, `root_manager/manager.py` | `bonsai/__main__.py` | `high` |
+| `bonsai/observability/store.py` | `core/orchestrator/models.py` | `bonsai/observability/report.py`, `bonsai/observability/dashboard.py`, `bonsai/cli/status_command.py`, `bonsai/cli/report_command.py`, `core/orchestrator/orchestrator.py`, `bonsai/cli/run_command.py` | `high` |
+| `bonsai/observability/report.py` | `bonsai/observability/store.py`, `core/orchestrator/models.py` | `bonsai/observability/dashboard.py`, `bonsai/cli/status_command.py`, `bonsai/cli/report_command.py` | `high` |
+| `bonsai/observability/dashboard.py` | `bonsai/observability/store.py`, `bonsai/observability/report.py`, `root_manager/manager.py` | `bonsai/cli/status_command.py` | `medium` |
+| `bonsai/cli/status_command.py` | `bonsai/observability/store.py`, `bonsai/observability/report.py`, `bonsai/observability/dashboard.py`, `root_manager/manager.py`, `bonsai/cli/display.py` | `bonsai/__main__.py` | `medium` |
+| `bonsai/cli/report_command.py` | `bonsai/observability/store.py`, `bonsai/observability/report.py`, `bonsai/cli/display.py` | `bonsai/__main__.py` | `medium` |
 
 Criticality values:
 - `critical` — removing this component breaks core flows
@@ -58,4 +63,4 @@ A pruning proposal without a blast radius assessment will not be approved.
 
 ---
 
-_Last updated: 2026-04-08 (Phase 6 orchestrator)_
+_Last updated: 2026-04-08 (Phase 7 observability interfaces)_

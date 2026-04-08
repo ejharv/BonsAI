@@ -49,6 +49,16 @@
 **Rationale:** Centralizing lifecycle management in the orchestrator prevents race conditions and invalid transitions in concurrent execution. Clear ownership makes debugging straightforward — if a node is in the wrong stage the orchestrator is always where to look.
 **Alternatives considered:** Nodes manage their own transitions — rejected because it distributes lifecycle logic across the codebase making invariant enforcement harder.
 
+### Decision: "Run history stored as .json files in roots/runs/"
+**Date:** 2026-04-08
+**Rationale:** Run history needs to be persistent, queryable, and human readable. JSON files in roots/runs/ give us all three. One file per run named {run_id}.json. An index file roots/runs/index.md summarizes all runs in a scannable table. This keeps observability data alongside the project state it describes and makes it git-trackable. A developer can inspect any run by reading its JSON file directly.
+**Alternatives considered:** SQLite — rejected because it is not human readable or git-diffable. In-memory only — rejected because history is lost between sessions.
+
+### Decision: "bonsai status and bonsai report as observability CLI commands"
+**Date:** 2026-04-08
+**Rationale:** Developers need two modes of observability. status is a quick live dashboard — run it anytime to see project health. report generates detailed artifacts suitable for sharing or archiving. Both read from the same RunStore and ReportGenerator — the CLI commands are thin wrappers.
+**Alternatives considered:** Web dashboard — rejected as too heavy for a CLI tool. Single combined command — rejected because status and report have different use patterns.
+
 ---
 
 _Last updated: 2026-04-08_

@@ -118,6 +118,56 @@ def main():
         )
     )
 
+    # bonsai status
+    status_parser = subparsers.add_parser(
+        "status",
+        help=(
+            "Show project dashboard — "
+            "recent runs, budget trends, "
+            "quality health."
+        )
+    )
+    status_parser.add_argument(
+        "--runs",
+        type=int,
+        default=5,
+        help="Number of recent runs to show."
+    )
+
+    # bonsai report
+    report_parser = subparsers.add_parser(
+        "report",
+        help="Generate a run report."
+    )
+    report_parser.add_argument(
+        "type",
+        choices=[
+            "runs", "budget",
+            "health", "tree"
+        ],
+        help="Type of report to generate."
+    )
+    report_parser.add_argument(
+        "--run-id",
+        help=(
+            "Run ID for tree report. "
+            "Required when type is tree."
+        )
+    )
+    report_parser.add_argument(
+        "--limit",
+        type=int,
+        default=20,
+        help="Number of runs to include."
+    )
+    report_parser.add_argument(
+        "--output",
+        help=(
+            "Write report to this file "
+            "instead of printing."
+        )
+    )
+
     # bonsai run-multi
     multi_parser = subparsers.add_parser(
         "run-multi",
@@ -160,6 +210,16 @@ def main():
 
     if args.command == "init":
         success = run_init(args)
+        sys.exit(0 if success else 1)
+    elif args.command == "status":
+        from bonsai.cli.status_command \
+            import run_status
+        success = run_status(args)
+        sys.exit(0 if success else 1)
+    elif args.command == "report":
+        from bonsai.cli.report_command \
+            import run_report
+        success = run_report(args)
         sys.exit(0 if success else 1)
     elif args.command == "run":
         from bonsai.cli.run_command \

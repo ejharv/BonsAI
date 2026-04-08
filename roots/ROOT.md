@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 6 complete — multi-agent orchestration working**
+**Phase 7 — Observability interfaces defined**
 
-`bonsai run-multi` live and smoke tested. Orchestrator manages multi-agent execution trees with agent-driven branching via `<branch_request>` tags. Node lifecycle fully enforced. Budget allocation and signal aggregation across children working. `check_signal_propagation` invariant implemented. One remaining stub: `check_intent_coherence` (requires embedding similarity — deferred to Phase 7+). 99 unit tests passing.
+RunStore, ReportGenerator, and Dashboard contracted. `bonsai status` and `bonsai report` subcommands wired in `__main__.py`. Two decisions recorded. All methods raise NotImplementedError — implementation is next. Phase 6 complete: `bonsai run-multi` live and smoke tested, 99 unit tests passing.
 
 ---
 
@@ -40,12 +40,12 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**Phase 7 — Observability and budget dashboard.**
+**Phase 7 — Implement observability stubs.**
 
-Run history stored to roots/. Budget consumption trends per agent. Tree visualization from stored run results.
+All interfaces contracted. Builder implements RunStore, ReportGenerator, Dashboard, status_command, report_command. Wire RunStore into orchestrator and run_command. Write tests. Smoke test bonsai status and bonsai report live.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
 ---
 
-_Last updated: 2026-04-08 (Phase 6 complete)_
+_Last updated: 2026-04-08 (Phase 7 interfaces defined)_

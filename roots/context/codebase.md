@@ -6,9 +6,9 @@
 
 ## Current State
 
-**Phase 6 complete. Multi-agent orchestration working.**
+**Phase 7 interfaces defined. Observability layer contracted.**
 
-Twenty-five modules tracked. Core contracts, root manager, reconnaissance agent, CLI, executor layer, and orchestrator all complete. `bonsai run-multi` live — multi-agent execution tree with agent-driven branching. All three invariants implemented.
+Thirty modules tracked. Core contracts, root manager, reconnaissance agent, CLI, executor layer, and orchestrator all complete. `bonsai run-multi` live — multi-agent execution tree with agent-driven branching. All three invariants implemented.
 
 ---
 
@@ -70,6 +70,11 @@ core/
 | `tests/test_reconnaissance.py` | 31 unit tests covering ReconnaissanceAgent pipeline, domain identification, pattern detection, gap analysis, roster proposal, and write_to_roots — all passing | Builder | `complete` | 2026-04-08 |
 | `tests/test_cli.py` | 18 unit tests covering _initialize_roots, display functions, _write_bonsai_config, and run_init integration — all passing | Builder | `complete` | 2026-04-08 |
 | `tests/test_executor.py` | 26 unit tests covering ClaudeCodeExecutor, APIExecutor, _load_bonsai_config, and _route_task — all passing | Builder | `complete` | 2026-04-08 |
+| `bonsai/observability/store.py` | RunStore — persists RunResult to roots/runs/ as JSON; RunSummary and StoredRun types; index.md for fast summary access; query methods: list_runs, load_run, runs_for_task_pattern, budget_by_agent, success_rate | Architect | `defined` | 2026-04-08 |
+| `bonsai/observability/report.py` | ReportGenerator — run_summary_report, budget_report, tree_report, health_report; all return strings; _format_node_tree recursive formatter | Architect | `defined` | 2026-04-08 |
+| `bonsai/observability/dashboard.py` | Dashboard — terminal dashboard for bonsai status; render(), _render_header, _render_recent_runs, _render_budget_summary, _render_quality_health, _render_next_priority | Architect | `defined` | 2026-04-08 |
+| `bonsai/cli/status_command.py` | Implementation of bonsai status; wires Dashboard to CLI | Architect | `defined` | 2026-04-08 |
+| `bonsai/cli/report_command.py` | Implementation of bonsai report; generates and outputs run reports by type (runs, budget, health, tree) | Architect | `defined` | 2026-04-08 |
 
 Status values: `defined` (interface exists, no implementation) → `in progress` → `implemented` → `complete` → `deprecated`
 
@@ -87,4 +92,4 @@ The Builder is responsible for keeping this file current. A codebase.md that lag
 
 ---
 
-_Last updated: 2026-04-08 (Phase 6 complete)_
+_Last updated: 2026-04-08 (Phase 7 interfaces defined)_

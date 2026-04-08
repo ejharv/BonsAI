@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 6 complete — multi-agent orchestration working**
+**Phase 7 — observability interfaces defined**
 
 ---
 
@@ -58,21 +58,33 @@
   - Two decisions recorded: agent-driven branching, orchestrator lifecycle ownership
   - Smoke tested: `bonsai run-multi` completed in 116.3s, 1 node, 12.26 budget units, Success: True
   - `check_signal_propagation` implemented in `core/invariants/invariants.py`
+- Observability interfaces defined — Phase 7 Part 1 complete
+  - `bonsai/observability/store.py` — RunStore, RunSummary, StoredRun types; all methods contracted
+  - `bonsai/observability/report.py` — ReportGenerator; all report methods contracted
+  - `bonsai/observability/dashboard.py` — Dashboard; all render methods contracted
+  - `bonsai/cli/status_command.py` — run_status contracted
+  - `bonsai/cli/report_command.py` — run_report contracted
+  - `bonsai/__main__.py` — status and report subcommands added
+  - Two decisions recorded: run history as JSON, status/report as CLI commands
 
 ---
 
 ## In Progress
 
-_Nothing._
+Observability implementation — all NotImplementedError stubs across store.py, report.py, dashboard.py, status_command.py, report_command.py
 
 ---
 
 ## Next
 
-- **Phase 7 — Observability and budget dashboard**
-  - Run history stored to roots/
-  - Budget consumption trends per agent
-  - Tree visualization from stored run results
+- **Phase 7 — Implement all observability stubs**
+  - Implement RunStore (store.py)
+  - Implement ReportGenerator (report.py)
+  - Implement Dashboard (dashboard.py)
+  - Implement status_command.py and report_command.py
+  - Wire RunStore into orchestrator.py and run_command.py
+  - Write and pass tests/test_observability.py
+  - Smoke test: bonsai status and bonsai report live
 
 ---
 
@@ -96,4 +108,4 @@ Phase 6 complete. Orchestrator implemented in full. `core/orchestrator/models.py
 
 ---
 
-_Last updated: 2026-04-08 (Phase 6 complete)_
+_Last updated: 2026-04-08 (Phase 7 interfaces defined)_
