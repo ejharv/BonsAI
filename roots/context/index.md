@@ -21,7 +21,7 @@ Context files decay. A stale context file is worse than no context file — it p
 
 | File | Status | Owner Agent | Last Updated | Freshness |
 |------|--------|-------------|--------------|-----------|
-| codebase.md | clean | Builder | 2026-04-07 | fresh |
+| codebase.md | dirty | Builder | 2026-04-07 | fresh |
 | patterns.md | clean | Builder | 2026-04-07 | fresh |
 | failures.md | clean | Tester | 2026-04-07 | fresh |
 | dependencies.md | clean | Architect / Builder | 2026-04-07 | fresh |

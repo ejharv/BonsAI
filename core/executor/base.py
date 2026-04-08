@@ -97,6 +97,57 @@ class BaseExecutor(ABC):
         Not abstract — both backends
         use the same prompt format.
         """
-        raise NotImplementedError(
-            "Phase 5 implementation"
+        ctx = prompt.context
+        parts = []
+
+        parts.append("# Bonsai Agent Execution")
+        parts.append("")
+        parts.append("## Your Identity")
+        parts.append(ctx.agent_definition)
+        parts.append("")
+        parts.append("## Project Context")
+        parts.append("")
+
+        for path, content in ctx.relevant_roots.items():
+            parts.append(f"### {path}")
+            parts.append(content)
+            parts.append("")
+
+        parts.append("## Your Task")
+        parts.append(ctx.task)
+        parts.append("")
+
+        parts.append("## Parent Intent")
+        if prompt.seed_depth > 0 and prompt.parent_intent:
+            parts.append(prompt.parent_intent)
+        else:
+            parts.append("This is a root level task.")
+        parts.append("")
+
+        parts.append("## Success Criteria")
+        parts.append(prompt.success_criteria)
+        parts.append("")
+
+        parts.append("## Output Format")
+        parts.append(ctx.output_format)
+        parts.append("")
+
+        parts.append("## Roots to Update")
+        parts.append(
+            "After completing your task update these roots/ files "
+            "by providing complete new content between XML tags:"
         )
+        parts.append("")
+        for path in ctx.roots_to_update:
+            parts.append(f'<root_update path="{path}">')
+            parts.append("[provide complete file content]")
+            parts.append("</root_update>")
+            parts.append("")
+
+        parts.append("## Budget Awareness")
+        parts.append(
+            f"You have {prompt.budget_allocated} budget units for this task. "
+            "Be efficient. Do not pad output. Complete the task and stop."
+        )
+
+        return "\n".join(parts)

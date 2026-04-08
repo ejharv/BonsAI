@@ -19,7 +19,7 @@ This region holds the foundational documents that define what Bonsai is, where i
 | File | Status | Owner Agent | Last Updated | Freshness |
 |------|--------|-------------|--------------|-----------|
 | vision.md | clean | Architect | 2026-04-07 | fresh |
-| state.md | clean | Architect | 2026-04-07 | fresh |
+| state.md | dirty | Architect | 2026-04-07 | fresh |
 | decisions.md | clean | Architect | 2026-04-07 | fresh |
 
 Freshness legend: `fresh` (updated this session) → `aging` (1–3 sessions old) → `stale` (needs review)

@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 5 interfaces defined — executor layer contracted, awaiting Builder implementation**
+**Phase 5 complete — bonsai run working, system is self-building**
 
 ---
 
@@ -48,27 +48,31 @@
   - `bonsai/cli/init_command.py` — full init pipeline: validate, initialize roots/, run reconnaissance, present gaps, confirm roster, write .bonsai config
   - 18 unit tests in `tests/test_cli.py` — all passing
   - Smoke tested against BonsAI codebase itself — `bonsai init . --involvement low` completes successfully
-- Executor interfaces defined — claude_code and api backends contracted
+- bonsai run working — executor layer complete, smoke test passed
   - `core/executor/models.py` — ExecutorBackend, ExecutorStatus, AgentContext, AgentPrompt, BudgetUsage, ExecutorResult
-  - `core/executor/base.py` — BaseExecutor ABC, shared _parse_roots_updates, build_prompt_text contract
-  - `core/executor/claude_code.py` — ClaudeCodeExecutor contract (all NotImplementedError)
-  - `core/executor/api.py` — APIExecutor contract (all NotImplementedError)
-  - `bonsai/cli/run_command.py` — run_task, _load_bonsai_config, _select_executor, _route_task, _load_agent_context, _apply_roots_updates contracts
-  - Two decisions recorded: executor backends, keyword routing
+  - `core/executor/base.py` — BaseExecutor ABC, shared _parse_roots_updates, build_prompt_text implemented
+  - `core/executor/claude_code.py` — ClaudeCodeExecutor fully implemented
+  - `core/executor/api.py` — APIExecutor fully implemented
+  - `bonsai/cli/run_command.py` — full run pipeline implemented
+  - 26 unit tests in `tests/test_executor.py` — all passing
+  - Smoke tested: `bonsai run` routed to builder, executed via claude_code, applied roots updates, 7.59 budget units, 70.8s
+  - `check_budget_conservation` implemented in `core/invariants/invariants.py` by smoke test agent
 
 ---
 
 ## In Progress
 
-- Executor layer Builder implementation — all NotImplementedError stubs to be replaced
+_Nothing._
 
 ---
 
 ## Next
 
-- Implement all NotImplementedError stubs in executor layer and run_command.py
-- Write tests/test_executor.py and pass all tests
-- Smoke test: bonsai run against BonsAI itself
+- **Phase 6 — Orchestrator** — multi-agent runs with real seed lifecycle
+  - Manages GERMINATING → GROWING → BRANCHING → CLOSING state machine
+  - Budget allocation across multiple agents
+  - Child seed spawning when complexity threshold exceeded
+  - Signal aggregation from child results
 
 ---
 
@@ -80,33 +84,9 @@ _None._
 
 ## Last Session Summary
 
-**Session: 2026-04-07**
-
-Root manager interface defined. `root_manager/models.py` establishes all typed structures (FileStatus, Freshness, RootFile, RegionIndex, ProjectState, DecisionEntry, CodebaseEntry, DependencyEntry, RootManagerResult). `root_manager/reader.py` defines nine read contracts. `root_manager/writer.py` defines eight write contracts including dirty flag management and pattern tracking. `root_manager/manager.py` defines the single agent-facing interface with session lifecycle and needs_reread. Decision recorded: RootManager as single interface, no direct file access by agents. Codebase map, dependency map, state, and ROOT.md updated. Root manager interface pushed to main.
-
----
-
-**Session: 2026-04-07**
-
-Root manager implemented in full. All `NotImplementedError` stubs replaced with working Python code. `RootReader` parses `.md` files into typed structures using a generic `_parse_table` helper and dedicated parsers for `ProjectState` and `DecisionEntry`. `RootWriter` serializes typed structures back to `.md` using a phase-based `_split_at_table` helper that cleanly separates pre/table/post content, enabling safe upsert and append operations. `RootManager` composes both, manages session-level file status cache from region index files, and implements `begin_session`/`end_session`/`needs_reread`. 24 unit tests written and all passing. `MarkdownTableParser` pattern registered in `context/patterns.md`. Codebase map updated to reflect implemented status. Phase 2 complete.
-
----
-
-**Session: 2026-04-07**
-
-Reconnaissance agent interface defined. Three decisions recorded: graphify integration strategy, graphify lifecycle boundary, and reconnaissance read-only constraint. `agents/reconnaissance/models.py` defines `ConfidenceLevel`, `GapSeverity`, `ObservedDomain`, `DetectedPattern`, `DeveloperGap`, `ReconnaissanceInput`, and `ReconnaissanceOutput` — all as dataclasses with full field documentation. `agents/reconnaissance/agent.py` defines `ReconnaissanceAgent` with a ten-step `run` pipeline and seven dedicated methods — all raising `NotImplementedError`. Codebase map, dependency map, state, and ROOT.md updated. Phase 3 interface complete.
-
----
-
 **Session: 2026-04-08**
 
-Reconnaissance agent implemented in full. All `NotImplementedError` stubs replaced with working Python code. `scan_project_structure` uses `os.walk` with in-place directory pruning to skip `.git`, `__pycache__`, `node_modules`, and similar. `identify_domains` unwraps container folders (`src/`, `app/`) to find domain subdirectories, then combines folder signals, graphify community signals, requirements.txt package hints, entry point signals, and git frequency signals — assigning HIGH (3+), MEDIUM (2), or LOW (1) confidence. `detect_patterns` checks for repeated filenames (≥3 occurrences, excluding conventional files), similar folder structures (Jaccard similarity >70%), and oversized files (>500 lines). `analyze_git_history` runs `git log` with subprocess, parses commit blocks into per-folder frequency counts and co-change pairs. `identify_gaps` produces four gaps (purpose, activity, duplication, constraints) filtered by involvement_preference. `propose_roster` produces one `{name}_agent` per HIGH/MEDIUM domain, merges LOW domains into parents or marks `_unverified_agent`, always appends quality and evaluator. `write_to_roots` writes codebase entries, dependency entries, pattern entries, project state, and agent `.md` files via RootManager and direct pathlib writes. 31 unit tests written and all passing. `AgentPipeline` pattern registered in `context/patterns.md`. Phase 3 complete.
-
----
-
-**Session: 2026-04-08**
-
-CLI entry point implemented in full. `bonsai/__main__.py` provides `python -m bonsai` routing with argparse subcommands. `bonsai/cli/display.py` centralises all terminal output with box-drawing table functions for domain summary and roster display. `bonsai/cli/init_command.py` wires the full init pipeline: path validation, roots/ initialization, RootManager startup, ReconnaissanceAgent run, developer gap presentation, roster confirmation, and .bonsai config write. 18 unit tests written and all passing. Smoke tested against BonsAI codebase itself — `bonsai init . --involvement low` completes successfully, writing .bonsai and vision.md. Phase 4 complete.
+Phase 5 complete. Executor layer implemented in full. `core/executor/base.py` — BaseExecutor ABC with shared `_parse_roots_updates` and `build_prompt_text`. `core/executor/claude_code.py` — ClaudeCodeExecutor: runs claude --print subprocess, tracks wall time and output length for budget proxy. `core/executor/api.py` — APIExecutor: calls Anthropic SDK, tracks exact tokens, 3x output weight in budget formula. `bonsai/cli/run_command.py` — full run pipeline: config loading, auto-select executor, keyword routing, agent context assembly, prompt construction, execution, roots update application, result reporting. 26 unit tests in `tests/test_executor.py` — all passing. Smoke tested: `bonsai run "implement check_budget_conservation..." --executor claude_code --budget 15.0` completed in 70.8s consuming 7.5934 budget units, routed to builder agent, applied roots updates to state.md and codebase.md. Agent provided `check_budget_conservation` implementation which was applied to `core/invariants/invariants.py`.
 
 ---
 

@@ -48,10 +48,17 @@ def check_budget_conservation(
     Prevents: budget overrun, nodes that cannot afford to synthesize their
     children's outputs, cascade budget failures.
     """
-    raise NotImplementedError(
-        "Budget conservation is arithmetically checkable. "
-        "Implementation in Phase 2."
-    )
+    allocated = seed.resource_envelope.budget_allocated
+    reserved = seed.resource_envelope.budget_reserved
+    total_child = sum(child_allocations)
+    total = total_child + reserved
+    if total > allocated:
+        return (
+            False,
+            f"Budget overrun: child allocations ({total_child:.4f}) + reserved "
+            f"({reserved:.4f}) = {total:.4f} exceeds allocated ({allocated:.4f})"
+        )
+    return (True, f"Budget conserved: {total:.4f} of {allocated:.4f} allocated")
 
 
 def check_signal_propagation(

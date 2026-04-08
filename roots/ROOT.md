@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 5 — Executor interfaces defined**
+**Phase 5 complete — bonsai run working, system is self-building**
 
-`core/executor/` layer contracted: models, base, claude_code, and api backends all defined with NotImplementedError stubs. `bonsai/cli/run_command.py` interface defined. `bonsai run` wired into `__main__.py`. Builder implementation in progress.
+`bonsai run` fully implemented. Two executor backends (claude_code and api). 26 executor tests passing. Smoke tested: `bonsai run` routed to builder, executed via claude CLI, applied roots updates, consumed 7.59 budget units. Agent implemented `check_budget_conservation` in `core/invariants/invariants.py`.
 
 ---
 
@@ -40,12 +40,12 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**Implement executor layer — Phase 5 Builder.**
+**Phase 6 — Orchestrator.**
 
-All NotImplementedError stubs in core/executor/ and bonsai/cli/run_command.py to be implemented. Tests written and passing. Smoke tested against BonsAI itself.
+Multi-agent runs with real seed lifecycle. GERMINATING → GROWING → BRANCHING → CLOSING state machine. Budget allocation across multiple agents. Child seed spawning on complexity threshold. Signal aggregation from child results.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
 ---
 
-_Last updated: 2026-04-08 (Phase 5 interfaces)_
+_Last updated: 2026-04-08 (Phase 5 complete)_
