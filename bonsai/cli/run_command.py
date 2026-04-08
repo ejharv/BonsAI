@@ -130,6 +130,69 @@ def run_task(args) -> bool:
         root_manager,
     )
 
+    # Save run to history
+    try:
+        from bonsai.observability.store import RunStore
+        from core.orchestrator.models import (
+            RunResult, NodeResult, NodeStatus,
+        )
+        from core.seed.seed import Signal
+        import uuid as _uuid
+
+        fake_signal = Signal(
+            contribution_score=(
+                0.8 if result.status
+                == ExecutorStatus.SUCCESS
+                else 0.0
+            ),
+            confidence=0.8,
+        )
+        fake_node = NodeResult(
+            node_id=str(_uuid.uuid4()),
+            status=(
+                NodeStatus.COMPLETE
+                if result.status ==
+                ExecutorStatus.SUCCESS
+                else NodeStatus.FAILED
+            ),
+            output=result.raw_output,
+            signal=fake_signal,
+            closure=None,
+            child_results=[],
+            budget_usage=result.budget_usage,
+            depth=0,
+        )
+        fake_run = RunResult(
+            run_id=str(_uuid.uuid4()),
+            task=args.task,
+            root_result=fake_node,
+            total_budget_consumed=(
+                result.budget_usage
+                .budget_consumed
+            ),
+            total_nodes=1,
+            pruned_nodes=0,
+            max_depth_reached=0,
+            success=(
+                result.status ==
+                ExecutorStatus.SUCCESS
+            ),
+            summary=(
+                f"Single agent run. "
+                f"{'Success' if result.status == ExecutorStatus.SUCCESS else 'Failed'}."
+            ),
+        )
+        store = RunStore(
+            project_path / "roots"
+        )
+        store.save_run(
+            fake_run,
+            result.budget_usage
+            .wall_time_seconds,
+        )
+    except Exception:
+        pass
+
     print_success("Task complete")
     print()
     print(

@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 7 — Observability interfaces defined**
+**Phase 7 complete — observability working, bonsai status live**
 
-RunStore, ReportGenerator, and Dashboard contracted. `bonsai status` and `bonsai report` subcommands wired in `__main__.py`. Two decisions recorded. All methods raise NotImplementedError — implementation is next. Phase 6 complete: `bonsai run-multi` live and smoke tested, 99 unit tests passing.
+RunStore persists every run to `roots/runs/` as JSON with a fast-summary index.md. `bonsai status` renders a live terminal dashboard. `bonsai report` generates runs, budget, health, and tree reports. RunStore wired into both `bonsai run` and `bonsai run-multi`. 128 unit tests passing.
 
 ---
 
@@ -40,12 +40,12 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**Phase 7 — Implement observability stubs.**
+**Phase 8 — Package and publish.**
 
-All interfaces contracted. Builder implements RunStore, ReportGenerator, Dashboard, status_command, report_command. Wire RunStore into orchestrator and run_command. Write tests. Smoke test bonsai status and bonsai report live.
+Make Bonsai installable via pip. Write README. Set up pyproject.toml. Publish to PyPI.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
 ---
 
-_Last updated: 2026-04-08 (Phase 7 interfaces defined)_
+_Last updated: 2026-04-08 (Phase 7 complete)_

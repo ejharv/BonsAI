@@ -158,6 +158,21 @@ class Orchestrator:
                 start_time,
             )
 
+            try:
+                from bonsai.observability.store import RunStore
+                store = RunStore(
+                    self.root_manager.roots_path
+                )
+                store.save_run(
+                    run_result,
+                    time.time() - start_time,
+                )
+            except Exception as e:
+                print(
+                    f"Warning: could not save "
+                    f"run history: {e}"
+                )
+
             self.root_manager.end_session(
                 "orchestrator",
                 run_result.summary,
