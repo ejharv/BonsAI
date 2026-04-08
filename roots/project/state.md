@@ -20,6 +20,7 @@
 - Root manager interface — `root_manager/models.py`, `root_manager/reader.py`, `root_manager/writer.py`, `root_manager/manager.py`
   - All types, reader contracts, writer contracts, and session management interface defined
   - All methods raise `NotImplementedError` — contracts only, no implementation logic
+- Deployment model decided — tool not template, roots inside project
 
 ---
 
