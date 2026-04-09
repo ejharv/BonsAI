@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 7 complete — ready for Phase 8**
+**Phase 8 in progress — packaging complete, awaiting PyPI upload**
 
 ---
 
@@ -86,21 +86,19 @@
   - 128 unit tests still passing
 - FitCypher real project test complete — bonsai init and bonsai run both validated on real external project
 - Roster-aware routing, roots format instructions, validator fix applied
+- pyproject.toml created, README written, package built (bonsaif-0.1.0 — twine check PASSED)
 
 ---
 
 ## In Progress
 
-_Nothing._
+- PyPI publish (waiting for account confirmation)
 
 ---
 
 ## Next
 
-- **Phase 8 — Package and publish as BonsaiAF**
-  - Set up pyproject.toml
-  - Write README
-  - Publish to PyPI
+- Upload to PyPI (`python3 -m twine upload dist/*`)
 
 ---
 
@@ -124,4 +122,10 @@ Phase 6 complete. Orchestrator implemented in full. `core/orchestrator/models.py
 
 ---
 
-_Last updated: 2026-04-08 (Phase 7 complete — FitCypher test done, ready for Phase 8)_
+**Session: 2026-04-08 (Phase 8)**
+
+Phase 8 in progress. pyproject.toml created — name bonsaif, version 0.1.0, zero required dependencies, anthropic SDK optional via `bonsaif[api]`. README.md written — full public-facing documentation covering quickstart, commands, executor backends, philosophy, and status. Package built: `python3 -m build` succeeded, both sdist and wheel created. `twine check` PASSED on both artifacts. Zero-dependency decision recorded in decisions.md. Awaiting PyPI account confirmation before upload.
+
+---
+
+_Last updated: 2026-04-08 (Phase 8 in progress — packaging complete, awaiting PyPI upload)_

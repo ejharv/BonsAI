@@ -69,6 +69,11 @@
 **Rationale:** Name-based unwrapping was too aggressive — `public/` contains site files directly and should be a domain, not unwrapped. The new heuristic: more subdirs than files means container (unwrap); more files than subdirs means domain leaf (keep as domain). This correctly handles `src/` (container) and `public/` (domain) without hardcoding folder names. Hidden dirs and known tooling dirs (`node_modules`, `__pycache__`, `.git`) are excluded from the count.
 **Alternatives considered:** Whitelist of container folder names — rejected because it requires constant maintenance as project structures vary.
 
+### Decision: "Zero required dependencies — anthropic SDK is optional"
+**Date:** 2026-04-08
+**Rationale:** pip install bonsaif must work without pulling in any dependencies. The anthropic SDK is only needed for api executor mode which is opt-in. Claude Code executor uses subprocess and needs no SDK. Zero dependencies means no conflicts, no version pinning problems, maximum compatibility.
+**Alternatives considered:** Requiring anthropic SDK — rejected because it forces users to install AI dependencies even if they only use claude_code executor.
+
 ---
 
 _Last updated: 2026-04-08_

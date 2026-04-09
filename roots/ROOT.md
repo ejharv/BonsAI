@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 7 complete — polishing for real project test**
+**Phase 8 — packaging complete, awaiting PyPI upload**
 
-RunStore persists every run to `roots/runs/` as JSON with a fast-summary index.md. `bonsai status` renders a live terminal dashboard. `bonsai report` generates runs, budget, health, and tree reports. RunStore wired into both `bonsai run` and `bonsai run-multi`. Progress spinner on `claude --print` execution. Default timeout raised to 300s. `--timeout` flag on `run` and `run-multi`. CLAUDE.md created. 128 unit tests passing.
+pyproject.toml created (bonsaif 0.1.0, zero required dependencies, anthropic SDK optional). README.md written. Package built: `bonsaif-0.1.0.tar.gz` and `bonsaif-0.1.0-py3-none-any.whl` — twine check PASSED. Awaiting PyPI account confirmation before upload.
 
 ---
 
@@ -40,12 +40,10 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**Test on FitCypher site repo — first real project run.**
-
-Then Phase 8 — Package and publish: pyproject.toml, README, PyPI.
+**Upload to PyPI** — run `python3 -m twine upload dist/*` once PyPI account is confirmed.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
 ---
 
-_Last updated: 2026-04-08 (Phase 7 complete — polishing)_
+_Last updated: 2026-04-08 (Phase 8 — packaging complete, awaiting PyPI upload)_
