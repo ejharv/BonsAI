@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 7 complete — bug fixes from FitCypher real project test**
+**Phase 7 complete — ready for Phase 8**
 
 ---
 
@@ -84,22 +84,22 @@
   - Bug 4: multi-line paste breaks gap input — _flush_stdin() added to init_command.py, called after each input() and before roster confirmation
   - Bug 5: index.md false positive repetition — _CONVENTIONAL_FILENAMES expanded; roots/ excluded via _EXCLUDED_DIRS
   - 128 unit tests still passing
+- FitCypher real project test complete — bonsai init and bonsai run both validated on real external project
+- Roster-aware routing, roots format instructions, validator fix applied
 
 ---
 
 ## In Progress
 
-FitCypher real project test — running bonsai init against FitCypher site repo
+_Nothing._
 
 ---
 
 ## Next
 
-- **Complete FitCypher test** — confirm roster, validate domain detection
-- **Phase 8 — Package and publish**
-  - Make Bonsai installable via pip
-  - Write README
+- **Phase 8 — Package and publish as BonsaiAF**
   - Set up pyproject.toml
+  - Write README
   - Publish to PyPI
 
 ---
@@ -124,4 +124,4 @@ Phase 6 complete. Orchestrator implemented in full. `core/orchestrator/models.py
 
 ---
 
-_Last updated: 2026-04-08 (Phase 7 complete — bug fixes from FitCypher test)_
+_Last updated: 2026-04-08 (Phase 7 complete — FitCypher test done, ready for Phase 8)_
