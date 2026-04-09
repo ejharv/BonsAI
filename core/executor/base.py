@@ -159,13 +159,33 @@ class BaseExecutor(ABC):
 
         parts.append("## Roots to Update")
         parts.append(
-            "After completing your task update these roots/ files "
-            "by providing complete new content between XML tags:"
+            "After completing your task update these roots/ files by providing "
+            "the COMPLETE FILE CONTENT in valid markdown format between XML tags. "
+            "Do NOT write Python objects or code representations. "
+            "Write the file exactly as it should appear when read as a text file.\n\n"
+            "Example format for roots/project/state.md:\n\n"
+            '<root_update path="roots/project/state.md">\n'
+            "# Project State\n\n"
+            "## Current Phase\n"
+            "Phase description here\n\n"
+            "## Completed\n"
+            "- item one\n"
+            "- item two\n\n"
+            "## In Progress\n"
+            "- current work\n\n"
+            "## Next Priority\n"
+            "next thing\n\n"
+            "## Blockers\n"
+            "None\n\n"
+            "## Last Session Summary\n"
+            "What happened in plain english\n"
+            "</root_update>\n\n"
+            "Now provide your actual updates:"
         )
         parts.append("")
         for path in ctx.roots_to_update:
             parts.append(f'<root_update path="{path}">')
-            parts.append("[provide complete file content]")
+            parts.append("[provide complete file content in markdown]")
             parts.append("</root_update>")
             parts.append("")
 

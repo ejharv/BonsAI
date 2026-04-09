@@ -312,24 +312,54 @@ def _route_task(
     Determine which agent should handle this task.
     Simple keyword routing.
     """
+    import re as _re
+
     task_lower = task.lower()
 
-    test_keywords = ["test", "spec", "coverage", "unittest", "pytest"]
+    def _word_match(keywords: list, text: str) -> bool:
+        for kw in keywords:
+            if _re.search(r'\b' + _re.escape(kw) + r'\b', text):
+                return True
+        return False
+
+    test_keywords = ["test", "tests", "testing", "spec", "coverage", "unittest", "pytest"]
     quality_keywords = [
         "quality", "duplicate", "prune", "refactor",
         "repetition", "consolidate",
     ]
     eval_keywords = ["evaluate", "simulate", "persona", "synthetic", "assessment"]
 
-    for kw in test_keywords:
-        if kw in task_lower:
-            return "tester"
-    for kw in quality_keywords:
-        if kw in task_lower:
-            return "quality"
-    for kw in eval_keywords:
-        if kw in task_lower:
-            return "evaluator"
+    if _word_match(test_keywords, task_lower):
+        return "tester"
+    if _word_match(quality_keywords, task_lower):
+        return "quality"
+    if _word_match(eval_keywords, task_lower):
+        return "evaluator"
+
+    # Check if task mentions a domain from the project roster
+    roster_str = config.get("roster", "")
+    roster_agents = [
+        a.strip()
+        for a in roster_str.split(",")
+        if a.strip()
+    ]
+
+    for agent in roster_agents:
+        # Strip _agent suffix for matching
+        # e.g. public_agent matches "public"
+        domain = agent.replace(
+            "_agent", ""
+        ).replace(
+            "_unverified", ""
+        )
+        if (
+            domain in task_lower
+            and domain not in (
+                "quality", "evaluator",
+                "builder", "tester"
+            )
+        ):
+            return agent
 
     return "builder"
 
@@ -402,9 +432,15 @@ def _is_valid_roots_content(
     if len(content.strip()) < 50:
         return False
     if "state.md" in path:
+        # Must have markdown headers
         return "##" in content
     if "codebase.md" in path:
-        return "|" in content
+        # Accept either table format or header format
+        return (
+            "|" in content
+            or "##" in content
+            or "#" in content
+        )
     return True
 
 
