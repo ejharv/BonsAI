@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-**Phase 8 in progress — packaging complete, awaiting PyPI upload**
+**Phase 8 complete — BonsaiAF is public**
 
 ---
 
@@ -86,19 +86,20 @@
   - 128 unit tests still passing
 - FitCypher real project test complete — bonsai init and bonsai run both validated on real external project
 - Roster-aware routing, roots format instructions, validator fix applied
-- pyproject.toml created, README written, package built (bonsaif-0.1.0 — twine check PASSED)
+- pyproject.toml created, README written, package built (bonsaiaf-0.1.0 — twine check PASSED)
+- BonsaiAF 0.1.0 published to PyPI — pip install bonsaiaf is live
 
 ---
 
 ## In Progress
 
-- PyPI publish (waiting for account confirmation)
+_Nothing._
 
 ---
 
 ## Next
 
-- Upload to PyPI (`python3 -m twine upload dist/*`)
+- Share with the world, gather feedback, iterate
 
 ---
 
@@ -128,4 +129,4 @@ Phase 8 in progress. pyproject.toml created — name bonsaif, version 0.1.0, zer
 
 ---
 
-_Last updated: 2026-04-08 (Phase 8 in progress — packaging complete, awaiting PyPI upload)_
+_Last updated: 2026-04-08 (Phase 8 complete — BonsaiAF 0.1.0 live on PyPI)_

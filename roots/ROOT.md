@@ -18,9 +18,9 @@
 
 ## Current Phase
 
-**Phase 8 — packaging complete, awaiting PyPI upload**
+**Phase 8 complete — BonsaiAF 0.1.0 live on PyPI**
 
-pyproject.toml created (bonsaif 0.1.0, zero required dependencies, anthropic SDK optional). README.md written. Package built: `bonsaif-0.1.0.tar.gz` and `bonsaif-0.1.0-py3-none-any.whl` — twine check PASSED. Awaiting PyPI account confirmation before upload.
+`pip install bonsaiaf` is live. pyproject.toml, README.md, and package artifacts all published. Zero required dependencies. Anthropic SDK optional via `bonsaiaf[api]`.
 
 ---
 
@@ -40,10 +40,10 @@ Status legend: `initialized` → `in progress` → `complete` → `degraded`
 
 ## Next Priority
 
-**Upload to PyPI** — run `python3 -m twine upload dist/*` once PyPI account is confirmed.
+Share with the world, gather feedback, iterate.
 
 See [project/state.md](project/state.md) for current blockers and session context.
 
 ---
 
-_Last updated: 2026-04-08 (Phase 8 — packaging complete, awaiting PyPI upload)_
+_Last updated: 2026-04-08 (Phase 8 complete — BonsaiAF 0.1.0 live on PyPI)_
